@@ -41,7 +41,7 @@
 	git add * // para subir al repo todos los archivos que contengan cambios
 	git add [nombre_archivo] // para subgir al repo solo [nombre_archivo] si tiene cambios
 	git commit -m "[añomesdiahoraminutos]_[tu_nombre_o_alias]__[etiqueta_sintetica_y_descriptiva_de_la_aportacion_realizada]"
-	git push activitat1 master
+	git push practica1 master
 
 4. IR AL PASO 2
 
