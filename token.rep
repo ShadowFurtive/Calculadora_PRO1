@@ -1,5 +1,0 @@
-// Cal definir els atributs i mètodes privats dins del fitxer .rep
-
-private:
-	string valor;
- 
