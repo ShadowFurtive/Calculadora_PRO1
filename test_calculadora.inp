@@ -1,0 +1,90 @@
+// Memòries buides
+d
+c
+b
+a
+// ===================================
+// Guardem expressions en les memòries
+// ===================================
+d = e + 1
+c = d * e
+b = c + d
+a = 2 * b + c
+// Mostrem les memòries
+d >>
+c >>
+b >>
+a >>
+// Expandim les memòries
+d >>>
+c >>>
+b >>>
+a >>>
+// Avaluem les memòries
+d
+c
+b
+a
+// Avaluem les expressions
+e + 1
+d * e
+c + d
+2 * b + c
+// =======================================
+// Guardem a la memòria e un operand enter
+// =======================================
+e = 1
+// Expandim les memòries
+d >>>
+c >>>
+b >>>
+a >>>
+// Avaluem les memòries
+d
+c
+b
+a
+// Avaluem les expressions
+e + 1
+d * e
+c + d
+2 * b + c
+// ========================================================================
+// Guardem a la memòria e una expressió que provocarà una expansió circular
+// ========================================================================
+e = a
+// Avaluem les memòries
+d
+c
+b
+a
+// =========================================================================
+// Guardem a la memòria e una expressió que no provoca una expansió circular
+// =========================================================================
+e = a1
+// Avaluem les memòries
+d
+c
+b
+a
+// =====================
+// Eliminem la memòria e
+// =====================
+e <<
+// Avaluem les memòries
+d
+c
+b
+a
+// =====================
+// Eliminem les memòries
+// =====================
+d <<
+c <<
+b <<
+a <<
+// Avaluem les memòries
+d
+c
+b
+a

@@ -1,0 +1,90 @@
+// Memòries buides
+d
+c
+b
+a
+// ===================================
+// Guardem expressions en les memòries
+// ===================================
+e + 1
+d * e
+c + d
+2 * b + c
+// Mostrem les memòries
+e + 1
+d * e
+c + d
+2 * b + c
+// Expandim les memòries
+e + 1
+( e + 1 ) * e
+( e + 1 ) * e + e + 1
+2 * ( ( e + 1 ) * e + e + 1 ) + ( e + 1 ) * e
+// Avaluem les memòries
+e + 1
+( e + 1 ) * e
+( e + 1 ) * e + e + 1
+2 * ( ( e + 1 ) * e + e + 1 ) + ( e + 1 ) * e
+// Avaluem les expressions
+e + 1
+( e + 1 ) * e
+( e + 1 ) * e + e + 1
+2 * ( ( e + 1 ) * e + e + 1 ) + ( e + 1 ) * e
+// =======================================
+// Guardem a la memòria e un operand enter
+// =======================================
+1
+// Expandim les memòries
+1 + 1
+( 1 + 1 ) * 1
+( 1 + 1 ) * 1 + 1 + 1
+2 * ( ( 1 + 1 ) * 1 + 1 + 1 ) + ( 1 + 1 ) * 1
+// Avaluem les memòries
+2
+2
+4
+10
+// Avaluem les expressions
+2
+2
+4
+10
+// ========================================================================
+// Guardem a la memòria e una expressió que provocarà una expansió circular
+// ========================================================================
+a
+// Avaluem les memòries
+ERROR_expressions_circulars
+ERROR_expressions_circulars
+ERROR_expressions_circulars
+ERROR_expressions_circulars
+// =========================================================================
+// Guardem a la memòria e una expressió que no provoca una expansió circular
+// =========================================================================
+a1
+// Avaluem les memòries
+a1 + 1
+( a1 + 1 ) * a1
+( a1 + 1 ) * a1 + a1 + 1
+2 * ( ( a1 + 1 ) * a1 + a1 + 1 ) + ( a1 + 1 ) * a1
+// =====================
+// Eliminem la memòria e
+// =====================
+e
+// Avaluem les memòries
+e + 1
+( e + 1 ) * e
+( e + 1 ) * e + e + 1
+2 * ( ( e + 1 ) * e + e + 1 ) + ( e + 1 ) * e
+// =====================
+// Eliminem les memòries
+// =====================
+d
+c
+b
+a
+// Avaluem les memòries
+d
+c
+b
+a

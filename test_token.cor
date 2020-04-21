@@ -1,0 +1,307 @@
+3
+És un operador unari: 0
+És un operador binari: 0
+És un operador commutatiu: 0
+És un valor booleà: 0
+És un valor enter: 1
+És una variable: 0
+Valor enter: 3
+Valor string: 3
+Prioritat: 8 1
+=============================
+T
+És un operador unari: 0
+És un operador binari: 0
+És un operador commutatiu: 0
+És un valor booleà: 1
+És un valor enter: 0
+És una variable: 0
+Valor booleà: 1
+Valor string: T
+Prioritat: 8 1
+=============================
+F
+És un operador unari: 0
+És un operador binari: 0
+És un operador commutatiu: 0
+És un valor booleà: 1
+És un valor enter: 0
+És una variable: 0
+Valor booleà: 0
+Valor string: F
+Prioritat: 8 1
+=============================
+x
+És un operador unari: 0
+És un operador binari: 0
+És un operador commutatiu: 0
+És un valor booleà: 0
+És un valor enter: 0
+És una variable: 1
+Valor string: x
+Prioritat: 8 1
+=============================
+x1
+És un operador unari: 0
+És un operador binari: 0
+És un operador commutatiu: 0
+És un valor booleà: 0
+És un valor enter: 0
+És una variable: 1
+Valor string: x1
+Prioritat: 8 1
+=============================
+-459
+És un operador unari: 0
+És un operador binari: 0
+És un operador commutatiu: 0
+És un valor booleà: 0
+És un valor enter: 1
+És una variable: 0
+Valor string: -459
+Prioritat: 8 1
+=============================
+T i T són iguals: 1
+T i F són iguals: 0
+T i T són diferents: 0
+T i F són diferents: 1
+=============================
+x i x són iguals: 1
+x i y són iguals: 0
+x i x són diferents: 0
+x i y són diferents: 1
+=============================
+TOKEN: 3
+És un operador unari: 0
+És un operador binari: 0
+És un operador commutatiu: 0
+És un valor booleà: 0
+És un valor enter: 1
+És una variable: 0
+Valor string: 3
+Prioritat: 8 1
+=============================
+TOKEN: T
+És un operador unari: 0
+És un operador binari: 0
+És un operador commutatiu: 0
+És un valor booleà: 1
+És un valor enter: 0
+És una variable: 0
+Valor string: T
+Prioritat: 8 1
+T i T són iguals: 1
+T i 3 són iguals: 0
+T i T són diferents: 0
+T i 3 són diferents: 1
+=============================
+TOKEN: F
+És un operador unari: 0
+És un operador binari: 0
+És un operador commutatiu: 0
+És un valor booleà: 1
+És un valor enter: 0
+És una variable: 0
+Valor string: F
+Prioritat: 8 1
+F i F són iguals: 1
+F i T són iguals: 0
+F i F són diferents: 0
+F i T són diferents: 1
+=============================
+TOKEN: x
+És un operador unari: 0
+És un operador binari: 0
+És un operador commutatiu: 0
+És un valor booleà: 0
+És un valor enter: 0
+És una variable: 1
+Valor string: x
+Prioritat: 8 1
+x i x són iguals: 1
+x i F són iguals: 0
+x i x són diferents: 0
+x i F són diferents: 1
+=============================
+TOKEN: x1
+És un operador unari: 0
+És un operador binari: 0
+És un operador commutatiu: 0
+És un valor booleà: 0
+És un valor enter: 0
+És una variable: 1
+Valor string: x1
+Prioritat: 8 1
+x1 i x1 són iguals: 1
+x1 i x són iguals: 0
+x1 i x1 són diferents: 0
+x1 i x són diferents: 1
+=============================
+TOKEN: -459
+És un operador unari: 0
+És un operador binari: 0
+És un operador commutatiu: 0
+És un valor booleà: 0
+És un valor enter: 1
+És una variable: 0
+Valor string: -459
+Prioritat: 8 1
+-459 i -459 són iguals: 1
+-459 i x1 són iguals: 0
+-459 i -459 són diferents: 0
+-459 i x1 són diferents: 1
+=============================
+TOKEN: not
+És un operador unari: 1
+És un operador binari: 0
+És un operador commutatiu: 0
+És un valor booleà: 0
+És un valor enter: 0
+És una variable: 0
+Valor string: not
+Prioritat: 3 0
+not i not són iguals: 1
+not i -459 són iguals: 0
+not i not són diferents: 0
+not i -459 són diferents: 1
+=============================
+TOKEN: and
+És un operador unari: 0
+És un operador binari: 1
+És un operador commutatiu: 1
+És un valor booleà: 0
+És un valor enter: 0
+És una variable: 0
+Valor string: and
+Prioritat: 2 1
+and i and són iguals: 1
+and i not són iguals: 0
+and i and són diferents: 0
+and i not són diferents: 1
+=============================
+TOKEN: or
+És un operador unari: 0
+És un operador binari: 1
+És un operador commutatiu: 1
+És un valor booleà: 0
+És un valor enter: 0
+És una variable: 0
+Valor string: or
+Prioritat: 1 1
+or i or són iguals: 1
+or i and són iguals: 0
+or i or són diferents: 0
+or i and són diferents: 1
+=============================
+TOKEN: ==
+És un operador unari: 0
+És un operador binari: 1
+És un operador commutatiu: 1
+És un valor booleà: 0
+És un valor enter: 0
+És una variable: 0
+Valor string: ==
+Prioritat: 4 1
+== i == són iguals: 1
+== i or són iguals: 0
+== i == són diferents: 0
+== i or són diferents: 1
+=============================
+TOKEN: !=
+És un operador unari: 0
+És un operador binari: 1
+És un operador commutatiu: 1
+És un valor booleà: 0
+És un valor enter: 0
+És una variable: 0
+Valor string: !=
+Prioritat: 4 1
+!= i != són iguals: 1
+!= i == són iguals: 0
+!= i != són diferents: 0
+!= i == són diferents: 1
+=============================
+TOKEN: +
+És un operador unari: 0
+És un operador binari: 1
+És un operador commutatiu: 1
+És un valor booleà: 0
+És un valor enter: 0
+És una variable: 0
+Valor string: +
+Prioritat: 5 1
++ i + són iguals: 1
++ i != són iguals: 0
++ i + són diferents: 0
++ i != són diferents: 1
+=============================
+TOKEN: -
+És un operador unari: 0
+És un operador binari: 1
+És un operador commutatiu: 0
+És un valor booleà: 0
+És un valor enter: 0
+És una variable: 0
+Valor string: -
+Prioritat: 5 1
+- i - són iguals: 1
+- i + són iguals: 0
+- i - són diferents: 0
+- i + són diferents: 1
+=============================
+TOKEN: *
+És un operador unari: 0
+És un operador binari: 1
+És un operador commutatiu: 1
+És un valor booleà: 0
+És un valor enter: 0
+És una variable: 0
+Valor string: *
+Prioritat: 6 1
+* i * són iguals: 1
+* i - són iguals: 0
+* i * són diferents: 0
+* i - són diferents: 1
+=============================
+TOKEN: /
+És un operador unari: 0
+És un operador binari: 1
+És un operador commutatiu: 0
+És un valor booleà: 0
+És un valor enter: 0
+És una variable: 0
+Valor string: /
+Prioritat: 6 1
+/ i / són iguals: 1
+/ i * són iguals: 0
+/ i / són diferents: 0
+/ i * són diferents: 1
+=============================
+TOKEN: %
+És un operador unari: 0
+És un operador binari: 1
+És un operador commutatiu: 0
+És un valor booleà: 0
+És un valor enter: 0
+És una variable: 0
+Valor string: %
+Prioritat: 6 1
+% i % són iguals: 1
+% i / són iguals: 0
+% i % són diferents: 0
+% i / són diferents: 1
+=============================
+TOKEN: **
+És un operador unari: 0
+És un operador binari: 1
+És un operador commutatiu: 0
+És un valor booleà: 0
+És un valor enter: 0
+És una variable: 0
+Valor string: **
+Prioritat: 7 0
+** i ** són iguals: 1
+** i % són iguals: 0
+** i ** són diferents: 0
+** i % són diferents: 1
+=============================

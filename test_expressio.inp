@@ -1,0 +1,68 @@
+// De POSTFIXA a POSTFIXA
+POSTFIXA a b T a and not or and -> POSTFIXA
+POSTFIXA a F or b or a b b and or and -> POSTFIXA
+POSTFIXA 8 x 4 3 - * != not x 5 3 + == or -> POSTFIXA
+POSTFIXA -2 5 23 + * 9 12 - / -> POSTFIXA
+POSTFIXA x 12 + 12 x + / -> POSTFIXA
+POSTFIXA b b and a or b F a or or and -> POSTFIXA
+POSTFIXA 3 5 + x == 3 4 - x * 8 != not or -> POSTFIXA
+POSTFIXA 12 9 - 23 5 + -2 * / -> POSTFIXA
+//
+// De POSTFIXA a INFIXA
+POSTFIXA a b T a and not or and -> INFIXA
+POSTFIXA a F or b or a b b and or and -> INFIXA
+POSTFIXA 8 x 4 3 - * != not x 5 3 + == or -> INFIXA
+POSTFIXA -2 5 23 + * 9 12 - / -> INFIXA
+POSTFIXA x 12 + 12 x + / -> INFIXA
+POSTFIXA b b and a or b F a or or and -> INFIXA
+POSTFIXA 3 5 + x == 3 4 - x * 8 != not or -> INFIXA
+POSTFIXA 12 9 - 23 5 + -2 * / -> INFIXA
+//
+// De INFIXA a POSTFIXA
+INFIXA a and ( b or not ( T and a ) ) -> POSTFIXA
+INFIXA ( a and ( b or ( not ( T and a ) ) ) ) -> POSTFIXA
+INFIXA ( F or a or b ) and ( a or b and b ) -> POSTFIXA
+INFIXA ( ( ( F or a ) or b ) and ( a or ( b and b ) ) ) -> POSTFIXA
+INFIXA -2 * ( 5 + 23 ) / ( 9 - 12 ) -> POSTFIXA
+INFIXA x + 3 + ( 2 * y ) - ( ( 2 * y ) + 3 + x ) -> POSTFIXA 
+INFIXA ( ( ( x + 3 ) + ( 2 * y ) ) - ( ( 2 * y ) + ( 3 + x ) ) ) -> POSTFIXA 
+INFIXA ( x + 12 ) / ( 12 + x ) -> POSTFIXA
+//
+// De INFIXA a INFIXA
+INFIXA a and ( b or not ( T and a ) ) -> INFIXA
+INFIXA ( a and ( b or ( not ( T and a ) ) ) ) -> INFIXA
+INFIXA ( F or a or b ) and ( a or b and b ) -> INFIXA
+INFIXA ( ( ( F or a ) or b ) and ( a or ( b and b ) ) ) -> INFIXA
+INFIXA -2 * ( 5 + 23 ) / ( 9 - 12 ) -> INFIXA
+INFIXA x + 3 + ( 2 * y ) - ( ( 2 * y ) + 3 + x ) -> INFIXA 
+INFIXA ( ( ( x + 3 ) + ( 2 * y ) ) - ( ( 2 * y ) + ( 3 + x ) ) ) -> INFIXA 
+INFIXA ( x + 12 ) / ( 12 + x ) -> INFIXA
+//
+// Llista d'OPERANDS
+POSTFIXA a b T a and not or and -> OPERANDS
+POSTFIXA a F or b or a b b and or and -> OPERANDS
+POSTFIXA 8 x 4 3 - * != not x 5 3 + == or -> OPERANDS
+POSTFIXA -2 5 23 + * 9 12 - / -> OPERANDS
+POSTFIXA x 12 + 12 x + / -> OPERANDS
+POSTFIXA b b and a or b F a or or and -> OPERANDS
+POSTFIXA 3 5 + x == 3 4 - x * 8 != not or -> OPERANDS
+POSTFIXA 12 9 - 23 5 + -2 * / -> OPERANDS
+INFIXA x + 3 + ( 2 * y ) - ( ( 2 * y ) + 3 + x ) -> OPERANDS
+//
+// EXPANDEIX llegeix un token i una 2a expressió,
+// canvia els tokens de la 1a expressió per la 2a expressió
+// i l'expressió resultant l'avalua i la mostra infixa
+POSTFIXA 8 x 4 3 - * != not x 5 3 + == or -> EXPANDEIX x 8 ->
+POSTFIXA 8 x 4 3 - * != not x 5 3 + == or -> EXPANDEIX x y ->
+POSTFIXA 8 x 4 3 - * != not x 5 3 + == or -> EXPANDEIX x 2 + x ->
+POSTFIXA x 12 + 12 x + / -> EXPANDEIX x 1 ->
+POSTFIXA x 12 + 12 x + / -> EXPANDEIX x y ->
+POSTFIXA x 12 + 12 x + / -> EXPANDEIX x 2 * y ->
+POSTFIXA 3 5 + x == 3 4 - x * 8 != not or -> EXPANDEIX x 8 ->
+POSTFIXA 3 5 + x == 3 4 - x * 8 != not or -> EXPANDEIX x y ->
+POSTFIXA 3 5 + x == 3 4 - x * 8 != not or -> EXPANDEIX x 2 + y ->
+INFIXA x + 3 + ( 2 * y ) - ( ( 2 * y ) + 3 + x ) -> EXPANDEIX x 1 ->
+INFIXA x + 3 + ( 2 * y ) - ( ( 2 * y ) + 3 + x ) -> EXPANDEIX x y ->
+INFIXA x + 3 + ( 2 * y ) - ( ( 2 * y ) + 3 + x ) -> EXPANDEIX y 1 ->
+INFIXA x + 3 + ( 2 * y ) - ( ( 2 * y ) + 3 + x ) -> EXPANDEIX y x ->
+INFIXA x + 3 + ( 2 * y ) - ( ( 2 * y ) + 3 + x ) -> EXPANDEIX y 2 + y ->
