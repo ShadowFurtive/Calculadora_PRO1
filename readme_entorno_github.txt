@@ -21,7 +21,7 @@
 	cd practica_PRO1
 
 1.7. Añade el repositorio remoto
-	git remote add practica1 https://github.com/oscarcodes/activitat_1_pro1
+	git remote add practica1 https://github.com/ShadowFurtive/Practica_PRO1
 
 1.8. Recibe en local los archivos remotos 
 	git pull practica1 master

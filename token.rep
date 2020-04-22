@@ -1,7 +1,3 @@
 // Cal definir els atributs i mètodes privats dins del fitxer .rep
-
-private:
-	int numero;
-	bool booler;
 	string valor;
  
