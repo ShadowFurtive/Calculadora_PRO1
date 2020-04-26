@@ -9,7 +9,14 @@ token::token(){
 }
 
 token::token(int i){
+	bool negatiu=false;
+	string aux="";
 	int temp;
+	if(i<0){
+		i=i*-1;
+		negatiu=true;
+		aux="-";
+	}
 	while(i/10!=0){
 		temp=i%10;
 		i= i/10;
@@ -17,7 +24,8 @@ token::token(int i){
 		valor = (char)temp + valor;
 	}
 	i=i+48;
-	valor = (char)i + valor ;
+	if(not negatiu) valor = (char)i + valor ;
+	else valor = aux + (char)i + valor;
 }
 
 token::token(bool b){
@@ -44,11 +52,10 @@ token::~token(){
 }
 
 token& token:: operator=(const token &e){
-	delete this;
-	string *foo;
-	foo = new string(e.valor);
-	return foo;
-		
+	if(this != &e){
+		valor=e.valor;
+	}
+	return *this;
 }
 
 bool token::es_operador_unari() const{
@@ -56,13 +63,23 @@ bool token::es_operador_unari() const{
 	else return false;
 }
 
-bool token::es_operador_binari() const{
-	if(valor=="and" or valor=="or") return true;
+bool token::es_operador_binari() const{	
+	if(not this->es_operador_unari()){
+		if(valor=="+" or valor=="-" or valor=="*") return true;
+		if(valor=="/" or valor=="%" or valor=="**") return true;
+		if(valor=="and" or valor=="or" or valor=="!=") return true;
+		if(valor=="==") return true;
+		return false;
+	}
 	else return false;
 }
 
 bool token::es_operador_commutatiu() const{
-	if(valor=="+" or valor=="*") return true;
+	if(this->es_operador_binari()){
+		if(valor=="+" or valor=="or" or valor=="*") return true;
+		if(valor=="and" or valor=="==" or valor=="!=") return true;
+		return false;
+	}
 	else return false;
 }
 
@@ -71,68 +88,79 @@ bool token::es_boolea() const{
 	else return false;
 }
 bool token::es_enter() const{
-	bool trobat = true;
-	for(unsigned int i = 0; i<=valor.size() and trobat; ++i){
-		if(valor[0]== '-') trobat = true;
-			else if (valor[i]<48 and valor[i]>57) trobat = false;
-			else trobat = false;
+	bool trobat = false;
+	if(valor[0]==45 and valor.size()>1){
+		trobat=true;
+		for(unsigned int i = 1; i<valor.size() and trobat; ++i){
+			if(valor[i]>=48 and valor[i]<=57) trobat=true;
+			else trobat=false;
+		}
+	}
+	else{ 
+		trobat=true;
+		for(unsigned int i = 0; i<valor.size() and trobat; ++i){
+			if(valor[i]>=48 and valor[i]<=57) trobat=true;
+			else trobat=false;
+		}
 	}
 	return trobat;
 }
 bool token::es_variable() const{
-	if (not(this->es_enter() and this->es_boolea() and this->es_operador_unari() and this->es_operador_binari() and this->es_operador_commutatiu() and valor=="%" and valor=="**" and valor=="/" and 	valor=="==" and valor=="!=" and valor=="-")) return true;
-	else return false;
+	if(this->es_boolea()) return false;
+	if(this->es_enter()) return false;
+	if(this->es_operador_binari() or this->es_operador_unari()) return false;
+	else{
+		for(unsigned int i = 0; i<valor.size(); ++i){
+		if ((valor[i]>=65 or valor[i]<=91) or (valor[i]>=97 or valor[i]<=123)) return true;
+		}
+	}
+	return false;
 }
 
 pair<int, bool> token::prioritat() const{
     // Pre: true
     // Post: Indica el nivell de prioritat a 'first' i si l'associativitat és d'esquerra a dreta a 'second' del p.i.
     //       Considerem que els operands tenen el màxim nivell de prioritat
-	pair<int, bool> res;
+	pair<int, bool> res(8, true);
 	if (this->es_operador_unari()){
 		res.first=3;
 		res.second=false;
 		return res;
 	}
-	else if(this->es_operador_binari()){
-		if (valor=="and"){
-		res.first=2;
-		res.second=true;
-		return res;
+	if(this->es_operador_binari()){
+		if (*this=="and"){
+			res.first=2;
+			res.second=true;
+			return res;
 		}
-		else{
-		res.first=1;
-		res.second=true;
-		return res;
+		if(*this=="or"){
+			res.first=1;
+			res.second=true;
+			return res;
+		}
+		if(*this=="==" or *this=="!="){
+			res.first=4;
+			res.second=true;
+			return res;
+		}
+		if(*this=="+" or *this=="-"){
+			res.first=5;
+			res.second=true;
+			return res;
+		}
+		if(*this=="*" or *this=="/" or *this=="%"){
+			res.first=6;
+			res.second=true;
+			return res;
+		}
+		if(*this=="**"){
+			res.first=7;
+			res.second=false;
+			return res;
 		}
 	}
-	else if(valor=="==" or valor=="!="){
-		res.first=4;
-		res.second=true;
-		return res;
-	}
-	else if(valor=="+" or valor=="-"){
-		res.first=5;
-		res.second=true;
-		return res;
-	}
-	else if(valor=="*" or valor=="/" or valor=="%"){
-		res.first=6;
-		res.second=true;
-		return res;
-	}
-	else if(valor=="**"){
-		res.first=7;
-		res.second=false;
-		return res;
-	}
-	else{
-		res.first=0;
-		res.second=false;
-		return res;
-	}
+	return res;
 }
-
 
 int token::to_int() const{
 	int numero;
@@ -145,7 +173,10 @@ int token::to_int() const{
 }
 
 bool token::to_bool() const{
-	if((valor=="T" or valor=="F") or (valor=="1" or valor=="0")) return true;
+	if(this->es_boolea()){
+		if(valor=="T") return true;
+		else return false;
+	}
 	else return false;
 }
 

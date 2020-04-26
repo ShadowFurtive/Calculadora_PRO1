@@ -82,7 +82,7 @@ int main() {
   cout << "És un valor booleà: " << t6.es_boolea() << endl;
   cout << "És un valor enter: " << t6.es_enter() << endl;
   cout << "És una variable: " << t6.es_variable() << endl;
-  cout << "Valor string: " << t6.to_string() << endl;
+  cout << "Valor entero: " << t6.to_int() << endl;
   cout << "Prioritat: " << t6.prioritat().first << " " << t6.prioritat().second << endl;
   cout << "=============================" << endl;
   
