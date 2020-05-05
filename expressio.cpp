@@ -14,21 +14,20 @@ expressio::expressio(const token &t){
 expressio::expressio(const token &t, const expressio &e){
   // Pre: t = TK és un token operador unari, e = E
   // Post: Crea una expressió formada per l'operador unari TK aplicat a l'expressió E
-  arbreBin<token> a = e.fe();
-  arbreBin<token> b = e.fd();
-  exp = arbreBin<token> (t,a,b);
+  arbreBin<token> b;
+  exp = arbreBin<token> (t, e.exp ,b);
 }
 
 expressio::expressio(const token &t, const expressio &e1, const expressio &e2){
   // Pre: t = TK és un token operador binari, e1 = E1, e2 = E2
   // Post: Crea una expressió formada per l'operador binari TK aplicat a les expressions E1 i E2
-  exp = arbreBin<token> (t, e1, e2);
+  exp = arbreBin<token> (t, e1.exp, e2.exp);
 }
 
 expressio:: expressio(const expressio &e){
   // Pre: e = E
   // Post: Crea una expressió a partir de l'expressió E (constructor per còpia)
-  exp = e;
+  exp = e.exp;
 }
 
 expressio::expressio& operator=(const expressio &e){
