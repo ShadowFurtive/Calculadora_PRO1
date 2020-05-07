@@ -91,18 +91,53 @@ expressio::list<token> operands() const{
 void expressio::llegir_infixa(istream& is){
   // Pre: El canal is conté una expressió en notació infixa i sense errors.
   // Post: El p.i. conté l'expressió llegida del canal is.
-  stack<string> op;
-  stack<arbreBin> expre;
+  stack<token> op;
+  stack<expressio> expre;
   token t;
 
+
+  while (is>>t){
+    if (t=="(") op.push(t);
+    if (t!=")" and t.es_operand()) op.push(t);
+    if (t.es_variable() or t.es_enter() or t.es_boolea()){
+      expressio e1 (t);
+      expre.push(e1);
+    }
+  }
 
 }
 
 void expressio::llegir_postfixa(istream& is){
 // Pre: El canal is conté una expressió en notació postfixa i sense errors.
 // Post: El p.i. conté l'expressió llegida del canal is.
+stack<expressio> op;
+token t;
 
+while (is >> t){
+    if (t.es_operand()){
+      if (t.es_operador_unari()){
+        expressio e1 = op.top();
+        op.pop();
+        expressio aux (t, e1);
+        op.push(aux);
+      }
+      else{
+        expressio e1 = op.top();
+        op.pop();
+        expressio e2 = op.top();
+        op.pop();
+        expressio aux (t, e2, e1);
+        op.push(aux);
+      }
+    }
+    else{
+      expressio ope (t);
+      op.push(ope);
+    }
+  }
+  exp = aux;
 }
+
 
 string expressio::infixa() const{
   // Pre: True
@@ -115,7 +150,25 @@ string expressio::postfixa() const{
   // Pre: True
   // Post: Retorna un string que conté l'expressió del p.i. amb notació postfixa,
   //   cada element separat amb un espai
+  stack<expressio> aux;
+  queue<token> col;
+  string res;
 
+  while(exp.es_operand() or not aux.empty()){
+    while(exp.es_operand()){
+      aux.push(exp);
+      exp = exp.fe();
+    }
+    exp = aux.top();
+    aux.pop();
+    col.push(exp.arrel());
+    exp = exp.fd();
+    while (not col.empty()){
+      string j = col.front().to_string();
+      res = res+j+32;
+    }
+  }
+  return res;
 }
 
 static expressio::expressio avalua_operador_unari(token op, expressio e){
