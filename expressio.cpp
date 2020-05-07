@@ -16,21 +16,20 @@ expressio::expressio(const token &t){
 expressio::expressio(const token &t, const expressio &e){
   // Pre: t = TK és un token operador unari, e = E
   // Post: Crea una expressió formada per l'operador unari TK aplicat a l'expressió E
-  arbreBin<token> a = e.fe();
-  arbreBin<token> b = e.fd();
-  exp = arbreBin<token> (t,a,b);
+  arbreBin<token> b;
+  exp = arbreBin<token> (t, e.exp ,b);
 }
 
 expressio::expressio(const token &t, const expressio &e1, const expressio &e2){
   // Pre: t = TK és un token operador binari, e1 = E1, e2 = E2
   // Post: Crea una expressió formada per l'operador binari TK aplicat a les expressions E1 i E2
-  exp = arbreBin<token> (t, e1, e2);
+  exp = arbreBin<token> (t, e1.exp, e2.exp);
 }
 
 expressio:: expressio(const expressio &e){
   // Pre: e = E
   // Post: Crea una expressió a partir de l'expressió E (constructor per còpia)
-  exp = e;
+  exp = e.exp;
 }
 
 expressio::expressio& operator=(const expressio &e){
@@ -69,7 +68,7 @@ expressio::bool es_operand() const{
   // Pre: True
   // Post: Retorna si l'expressió del p.i. és un operand
   //   (o sigui que l'arbre binari que conté l'expressió és una fulla)
-  if(exp.fe().es_buit() or exp.fd().es_buit())return true;
+  if((exp.fe().es_enter() or exp.fe().es_bool() or exp.fe().es_variable()) and (exp.fd().es_enter() or exp.fd().es_bool() or exp.fd().es_variable())) return true;
   else return false;
 }
 
@@ -94,6 +93,7 @@ void expressio::llegir_infixa(istream& is){
   stack<token> op;
   stack<expressio> expre;
   token t;
+	cin>>is
 
 
   while (is>>t){
@@ -222,17 +222,17 @@ static expressio::expressio avalua_operador_aritmetic(token op, expressio e1, ex
   // Post: Retorna l'expressió resultat d'avaluar l'operador OP sobre les expressions E1 i E2
   expressio exp (op);
 
-    if (not (e1.arrel().es_variable())){
+    if (not (e1.arrel().es_variable()) and e1.arrel().es_enter()){
       int x = e1.arrel().to_int();
     }
-    if (not(e2.arrel().es_variable())){
+    if (not(e2.arrel().es_variable()) and e1.arrel().es_enter()){
       int y = e2.arrel().to_int();
     }
     if (op.valor() == "*"){
         if (x == 0 or y == 0) return exp (token t(0));
-        else if (x == 1) return e2;
-        else if ( y == 1) return e1;
-        else{
+        if (x == 1) return e2;
+        if ( y == 1) return e1;
+        else if(e1.arrel().es_enter() and e2.arrel().es_enter()){
           int res = x*y;
           return exp (token t(res));
         }
@@ -240,7 +240,7 @@ static expressio::expressio avalua_operador_aritmetic(token op, expressio e1, ex
     if (op.valor() == "+"){
       if (x == 0) return e2;
       if (y == 0) return e1;
-      else{
+      else if(e1.arrel().es_enter() and e2.arrel().es_enter()){
         int res = x+y;
         return exp (token t(res));
       }
@@ -248,7 +248,7 @@ static expressio::expressio avalua_operador_aritmetic(token op, expressio e1, ex
     if (op.valor() == "-"){
       if (x == 0) return e2;
       if (y == 0) return e1;
-      else{
+      else if(e1.arrel().es_enter() and e2.arrel().es_enter()){
         int res = x-y;
         return exp (token t(res));
       }
@@ -256,7 +256,7 @@ static expressio::expressio avalua_operador_aritmetic(token op, expressio e1, ex
     if (op.valor() == "/"){
       if (x == 0) return exp (token t(0));
       if (y == 1) return e1;
-      else{
+      else if(e1.arrel().es_enter() and e2.arrel().es_enter()){
         int res = x/y;
         return exp (token t(res));
       }
@@ -264,7 +264,7 @@ static expressio::expressio avalua_operador_aritmetic(token op, expressio e1, ex
     if (op.valor() == "%"){
       if (x == 0) return exp (token t(0));
       if (y == 1) return exp (token t(0));
-      else{
+      else if(e1.arrel().es_enter() and e2.arrel().es_enter()){
         int res = x%y;
         return exp (token t(res));
       }
@@ -274,7 +274,7 @@ static expressio::expressio avalua_operador_aritmetic(token op, expressio e1, ex
       if (x == 1) return exp (token t(1));
       if (y == 0) return exp (token t(1));
       if (y == 1) return e1;
-      else{
+      else if(e1.arrel().es_enter() and e2.arrel().es_enter()){
         int res = pow(x,y);
         return exp (token t(res));
       }
@@ -289,33 +289,19 @@ expressio::expressio avalua() const{
     if(not exp.es_buit()){
       if (not exp.fe().es_buit()){
         exp.fe().avalua();
-        if (exp.arrel().es_operador_unari()){
-          e1.avulua_operador_unari(exp.arrel(), exp.fe());
-        }
-        if ((exp.fe().es_enter() and exp.fd().es_enter()) or (exp.fe().es_variable() and exp.fd().es_variable())){
-          e1.avalua_operador_aritmetic(exp.arrel(), exp.fe(), exp.fd());
-          if (e1.es_boolea()){
-            e1.avalua_operador_boolea(exp.arrel(), exp.fe(), exp.fd());
-          }
-          if (e1.arrel() == "==" or e1.arrel() == "!="){
-            e1.avalua_operador_comparacio(exp.arrel(), exp.fe(), exp.fd());
-          }
-        }
+        if (exp.arrel().es_operador_unari()) e1.avulua_operador_unari(exp.arrel(), exp.fe());
+        if ((exp.fe().es_enter() and exp.fd().es_enter()) or (exp.fe().es_variable() and exp.fd().es_variable())) e1.avalua_operador_aritmetic(exp.arrel(), exp.fe(), exp.fd());
+	if ((exp.fe().es_variable() and exp.fd().es_enter()) or (exp.fe().es_enter() and exp.fd().es_variable())) e1.avalua_operador_aritmetic(exp.arrel(), exp.fe(), exp.fd());
+        if (exp.fe().es_boolea() and exp.fd().es_boolea()) e1.avalua_operador_boolea(exp.arrel(), exp.fe(), exp.fd());
+        if (exp.arrel() == "==" or exp.arrel() == "!=") e1.avalua_operador_comparacio(exp.arrel(), exp.fe(), exp.fd());
       }
       if (not exp.fd().es_buit()){
         exp.fd().avalua();
-        if (exp.arrel().es_operador_unari()){
-          e2.avulua_operador_unari(exp.arrel(), exp.fe());
-        }
-        if ((exp.fe().es_enter() and exp.fd().es_enter()) or (exp.fe().es_variable() and exp.fd().es_variable())){
-          e2.avalua_operador_aritmetic(exp.arrel(), exp.fe(), exp.fd());
-          if (e2.es_boolea()){
-            e2.avalua_operador_boolea(exp.arrel(), exp.fe(), exp.fd());
-          }
-          if (e2.arrel() == "==" or e2.arrel() == "!=" ){
-            e2.avalua_operador_comparacio(exp.arrel(), exp.fe(), exp.fd());
-          }
-        }
+        if (exp.arrel().es_operador_unari()) e2.avulua_operador_unari(exp.arrel(), exp.fe());
+        if ((exp.fe().es_enter() and exp.fd().es_enter()) or (exp.fe().es_variable() and exp.fd().es_variable())) e2.avalua_operador_aritmetic(exp.arrel(), exp.fe(), exp.fd());
+	if ((exp.fe().es_variable() and exp.fd().es_enter()) or (exp.fe().es_enter() and exp.fd().es_variable())) e1.avalua_operador_aritmetic(exp.arrel(), exp.fe(), exp.fd());
+        if (e2.es_boolea()) e2.avalua_operador_boolea(exp.arrel(), exp.fe(), exp.fd());
+        if (e2.arrel() == "==" or e2.arrel() == "!=" ) e2.avalua_operador_comparacio(exp.arrel(), exp.fe(), exp.fd());
       }
       fin(exp.arrel(), e1, e2);
   }
