@@ -3,6 +3,7 @@
 #include <iterator>
 #include <algorithm>
 #include <stack>
+#include <queue>
 #include <math.h>
 
 expressio::expressio(const token &t){
@@ -32,13 +33,13 @@ expressio:: expressio(const expressio &e){
   exp = e.exp;
 }
 
-expressio::expressio& operator=(const expressio &e){
+expressio& expressio:: operator=(const expressio &e){
   // Pre: e = E
   // Post: Al p.i. se li ha assignat l'expressió E (operador assignació)
-  if(this != &e){
-    exp=e.exp;
-  }
-  return *this;
+	if (this != &e) {
+	    exp = e.exp;
+	  }
+	  return (*this);
 }
 
 expressio::~expressio(){
@@ -46,96 +47,162 @@ expressio::~expressio(){
   // Post: S'ha destruït l'expressió del p.i. (destructora)
 }
 
-expressio::token arrel() const{
+token expressio::arrel() const{
   // Pre: True
   // Post: Retorna el token de l'arrel del p.i.
   return exp.arrel();
 }
 
-expressio::expressio fe() const{
+expressio expressio::fe() const{
   // Pre: L'arrel del p.i. és un operador
-  // Post: Retorna l'expressió de l'esquerra del p.i.
-  return exp.fe();
+  // Post: Retorna l'expressió de l'esquerra del p.i.	
+  return this->fe();
 }
 
-expressio::expressio fd() const{
+expressio expressio::fd() const{
   // Pre: L'arrel del p.i. és un operador
   // Post: Retorna l'expressió de la dreta del p.i.
-  return exp.fd();
+  return this->fd();
 }
 
-expressio::bool es_operand() const{
+bool expressio::es_operand() const{
   // Pre: True
   // Post: Retorna si l'expressió del p.i. és un operand
   //   (o sigui que l'arbre binari que conté l'expressió és una fulla)
-  if((exp.fe().es_enter() or exp.fe().es_bool() or exp.fe().es_variable()) and (exp.fd().es_enter() or exp.fd().es_bool() or exp.fd().es_variable())) return true;
+  if((exp.fe().arrel().es_enter() or exp.fe().arrel().es_boolea() or exp.fe().arrel().es_variable()) and (exp.fd().arrel().es_enter() or exp.fd().arrel().es_boolea() or exp.fd().arrel().es_variable())) return true;
   else return false;
 }
 
-expressio::list<token> operands() const{
+list<token> expressio::operands() const{
   // Pre: True
   // Post: Retorna una llista dels tokens operands de l'expressió del p.i., d'esquerra a dreta
   list<token> op;
-  list<token>aux;
-  if(this->es_operand()){
-    token aux = exp.arrel();
-    op = exp.fe().operands();
-    aux = exp.fd().operands();
-    copy(op.rbegin(), op.rend(), front_inserter(aux));
-  }
-  else return op;
   return op;
 }
 
 void expressio::llegir_infixa(istream& is){
   // Pre: El canal is conté una expressió en notació infixa i sense errors.
   // Post: El p.i. conté l'expressió llegida del canal is.
-  stack<token> op;
-  stack<expressio> expre;
-  token t;
-	cin>>is
-
-
-  while (is>>t){
-    if (t=="(") op.push(t);
-    if (t!=")" and t.es_operand()) op.push(t);
-    if (t.es_variable() or t.es_enter() or t.es_boolea()){
-      expressio e1 (t);
-      expre.push(e1);
-    }
-  }
-
+  	stack<expressio> arb;
+	stack<token> o;
+	token s;
+	while(is>>s){
+		if(s=="("){
+			o.push(s);
+		}
+			else if(s==")"){
+				token aux(o.top());
+				o.pop();
+				while(aux!="("){
+					if(aux.es_operador_binari()){
+						expressio a1 = arb.top();
+						arb.pop();
+						expressio a2 = arb.top();
+						arb.pop();
+						expressio fin (aux, a2, a1);
+						arb.push(fin);
+					}
+					else {
+						expressio a1 = arb.top();
+						arb.pop();
+						expressio fin (aux, a1);
+						arb.push(fin);
+					}
+					if(not o.empty()){
+						aux=o.top();
+						o.pop();
+					}
+				}
+			}
+			else if(s.es_enter() or s.es_boolea() or s.es_variable()){
+				expressio a4(s);
+				arb.push(a4);
+			}
+			else if(s.es_operador_unari() or s.es_operador_binari()){
+				if(o.empty()){
+					o.push(s);
+				}
+				else{
+					pair<int, bool> res = s.prioritat();
+					pair<int, bool> res1 = o.top().prioritat();
+					while(((res.first < res1.first ) or (res.first<=res1.first and res.second)) and(not o.empty() and o.top()!="(")){
+						token aux = o.top();
+						o.pop();
+						if(aux.es_operador_binari()){
+							expressio a1 = arb.top();
+							arb.pop();
+							expressio a2 = arb.top();
+							arb.pop();
+							expressio fin (aux, a2, a1);
+							arb.push(fin);
+						}
+						else {
+							expressio a1 = arb.top();
+							arb.pop();
+							expressio fin (aux, a1);
+							arb.push(fin);
+						}
+						if(not o.empty()) res1 = o.top().prioritat();
+					}
+					o.push(s);
+				}
+			}
+	}
+	
+	
+	while(not o.empty()){
+		if(o.top().es_operador_binari()){
+			expressio a1 = arb.top();
+			arb.pop();
+			expressio a2 = arb.top();
+			arb.pop();
+			expressio fin (o.top(), a2, a1);
+			o.pop();
+			arb.push(fin);
+		}
+		else {
+			expressio a1 = arb.top();
+			arb.pop();
+			expressio fin (o.top(), a1);
+			o.pop();
+			arb.push(fin);
+		}
+	}
+	*this = arb.top();
 }
 
 void expressio::llegir_postfixa(istream& is){
 // Pre: El canal is conté una expressió en notació postfixa i sense errors.
 // Post: El p.i. conté l'expressió llegida del canal is.
-stack<expressio> op;
+stack<arbreBin<token>> op;
 token t;
 
 while (is >> t){
-    if (t.es_operand()){
-      if (t.es_operador_unari()){
-        expressio e1 = op.top();
-        op.pop();
-        expressio aux (t, e1);
-        op.push(aux);
-      }
-      else{
-        expressio e1 = op.top();
-        op.pop();
-        expressio e2 = op.top();
-        op.pop();
-        expressio aux (t, e2, e1);
-        op.push(aux);
-      }
-    }
-    else{
-      expressio ope (t);
-      op.push(ope);
-    }
-  }
-  exp = aux;
+	if(t.es_operador_binari() or t.es_operador_unari()){
+	if (t.es_operador_unari()){
+	arbreBin<token> e1 = op.top();
+	arbreBin<token> e2;
+	op.pop();
+	arbreBin<token> aux(t, e1, e2);
+	op.push(aux);
+	}
+	else{
+	arbreBin<token> e1 = op.top();
+	op.pop();
+	arbreBin<token> e2 = op.top();
+	op.pop();
+	arbreBin<token> aux (t, e2, e1);
+	op.push(aux);
+	}
+	}
+	else{
+	arbreBin<token> e1;
+	arbreBin<token> e2;
+	arbreBin<token> ope (t, e1, e2);
+	op.push(ope);
+	}
+	}
+	exp = op.top();
 }
 
 
@@ -143,167 +210,221 @@ string expressio::infixa() const{
   // Pre: True
   // Post: Retorna un string que conté l'expressió del p.i. amb notació infixa
   //   amb el mínim nombre de parèntesis, cada element separat amb un espai
-
+  	string s = " ERROR " ;
+	return s;
 }
 
 string expressio::postfixa() const{
   // Pre: True
   // Post: Retorna un string que conté l'expressió del p.i. amb notació postfixa,
   //   cada element separat amb un espai
-  stack<expressio> aux;
-  queue<token> col;
-  string res;
-
-  while(exp.es_operand() or not aux.empty()){
-    while(exp.es_operand()){
-      aux.push(exp);
-      exp = exp.fe();
-    }
-    exp = aux.top();
-    aux.pop();
-    col.push(exp.arrel());
-    exp = exp.fd();
-    while (not col.empty()){
-      string j = col.front().to_string();
-      res = res+j+32;
-    }
-  }
-  return res;
+	arbreBin<token> aux = exp;
+	stack<arbreBin<token>> auxiliar;
+	stack<token> col1, col;
+	string res;
+	auxiliar.push(aux);
+	aux=aux.fe();
+	while(not aux.es_buit() or not auxiliar.empty()){
+		while(not aux.es_buit()){
+			auxiliar.push(aux);
+			aux = aux.fe();
+		}
+		aux= auxiliar.top();
+		auxiliar.pop();
+		cout<<aux<<endl;
+		col.push(aux.arrel());
+		if(not aux.fd().es_buit()){
+			aux = aux.fd();	
+			auxiliar.push(aux);
+		}
+	}
+	while (not col.empty()){
+		col1.push(col.top());
+		col.pop();
+	}
+	while (not col1.empty()){
+		string j = col1.top().to_string();
+		col1.pop();
+		res = res+j+" ";
+	}
+	return res;
 }
 
-static expressio::expressio avalua_operador_unari(token op, expressio e){
+expressio expressio:: avalua_operador_unari(token op, expressio e){
   // Pre: op = OP és un operador unari, e = E
   // Post: Retorna l'expressió resultat d'avaluar l'operador OP sobre l'expressió E
-  if (op.es_operador_unari()) return not(e.arrel());
+  if (op.es_operador_unari()){
+	token t(not e.fe().arrel().to_bool());
+	expressio ae(t, e);
+	return ae;
+  }
   else{
-    expressio exp (op, e);
-    return exp;
+    expressio ae(op, e);
+    return ae;
   }
 }
 
-static expressio::expressio avalua_operador_boolea(token op, expressio e1, expressio e2){
+expressio expressio:: avalua_operador_boolea(token op, expressio e1, expressio e2){
   // Pre: op = OP és un operador binari booleà, e1 = E1, e2 = E2
   // Post: Retorna l'expressió resultat d'avaluar l'operador OP sobre les expressions E1 i E2
-  expressio exp (op);
-  if (op.valor() == "and"){
-    if(e1.arrel().to_bool() and not(e2.arrel().to_bool())) return exp (token t(false));
-    else if(e2.arrel().to_bool() and not(e1.arrel().to_bool())) return exp(token t(false));
-    else if(e1.arrel().to_bool() and e2.arrel().to_bool()) return exp (token t(true));
-    else return exp (token t(false));
+  token t1(false);
+  expressio fa(t1);
+  token t2(true);
+  expressio tr(t2);
+  if (op == "and"){
+    if(e1.arrel().to_bool() and not(e2.arrel().to_bool())) return fa;
+    else if(e2.arrel().to_bool() and not(e1.arrel().to_bool())) return fa;
+    else if(e1.arrel().to_bool() and e2.arrel().to_bool()) return tr;
+    else return fa;
   }
-  else if (op.valor() == "or") {
-    if(not(e1.arrel().to_bool()) and not(e2.arrel().to_bool())) return exp (token t(false);
-    else if(e1.arrel().to_bool() and not(e2.arrel().to_bool())) return exp (token t(true);
-    else if(e1.arrel().to_bool() and e2.arrel().to_bool()) return exp (token t(true);
-    else return exp (token t(true));
+  else if (op == "or") {
+    if(not(e1.arrel().to_bool()) and not(e2.arrel().to_bool())) return fa;
+    else if(e1.arrel().to_bool() and not(e2.arrel().to_bool())) return tr;
+    else if(e1.arrel().to_bool() and e2.arrel().to_bool()) return tr;
+    else return tr;
   }
-  else return expressio aux (op, e1, e2);
+  else{
+	expressio aux (op, e1, e2);
+	return aux;
+  }
 }
 
-static expressio::expressio avalua_operador_comparacio(token op, expressio e1, expressio e2){
+expressio expressio:: avalua_operador_comparacio(token op, expressio e1, expressio e2){
   // Pre: op = OP és un operador binari de comparació, e1 = E1, e2 = E2
   // Post: Retorna l'expressió resultat d'avaluar l'operador OP sobre les expressions E1 i E2
-  expressio exp (op);
+   token t1(false);
+  expressio fa(t1);
+  token t2(true);
+  expressio tr(t2);
   if ((e1.arrel().es_enter() and e2.arrel().es_enter()) or (e1.arrel().es_boolea() and e2.arrel().es_boolea())){
-    if (op.valor() == "=="){
-      if (e1.arrel() == e2.arrel()) return exp (token t(true));
-      else return exp (token t(false));
+    if (op == "=="){
+      if (e1.arrel() == e2.arrel()) return tr;
+      else return fa;
     }
-    else if (op.valor() == "!=") {
-      if (e1.arrel() != e2.arrel()) return exp (token t(true));
-      else return exp (token t(false));
+    else if (op == "!=") {
+      if (e1.arrel() != e2.arrel()) return tr;
+      else return fa;
     }
   }
-  else return expressio aux (op, e1, e2);
+  else{
+	expressio aux (op, e1, e2);
+	return aux;
+  }
+  expressio aux (op, e1, e2);
+   return aux;
 }
 
-static expressio::expressio avalua_operador_aritmetic(token op, expressio e1, expressio e2){
+expressio expressio:: avalua_operador_aritmetic(token op, expressio e1, expressio e2){
   // Pre: op = OP és un operador binari aritmètic, e1 = E1, e2 = E2
   // Post: Retorna l'expressió resultat d'avaluar l'operador OP sobre les expressions E1 i E2
-  expressio exp (op);
-
+	int x;
+	int y;
+	int res;
+	token t2(0);
+	expressio zer(t2);
+	token uno(1);
+	expressio un(uno);
     if (not (e1.arrel().es_variable()) and e1.arrel().es_enter()){
-      int x = e1.arrel().to_int();
+      x = e1.arrel().to_int();
     }
     if (not(e2.arrel().es_variable()) and e1.arrel().es_enter()){
-      int y = e2.arrel().to_int();
+      y = e2.arrel().to_int();
     }
-    if (op.valor() == "*"){
-        if (x == 0 or y == 0) return exp (token t(0));
+    if (op == "*"){
+        if (x == 0 or y == 0) return zer;
         if (x == 1) return e2;
         if ( y == 1) return e1;
         else if(e1.arrel().es_enter() and e2.arrel().es_enter()){
-          int res = x*y;
-          return exp (token t(res));
+          res = x*y;
+	  token fi(res);
+	  expressio alu(fi);
+          return alu;
         }
     }
-    if (op.valor() == "+"){
+    if (op == "+"){
       if (x == 0) return e2;
       if (y == 0) return e1;
       else if(e1.arrel().es_enter() and e2.arrel().es_enter()){
-        int res = x+y;
-        return exp (token t(res));
+          res = x+y;
+	  token fi(res);
+	  expressio alu(fi);
+          return alu;
       }
     }
-    if (op.valor() == "-"){
+    if (op == "-"){
       if (x == 0) return e2;
       if (y == 0) return e1;
       else if(e1.arrel().es_enter() and e2.arrel().es_enter()){
-        int res = x-y;
-        return exp (token t(res));
+          res = x-y;
+	  token fi(res);
+	  expressio alu(fi);
+          return alu;
       }
     }
-    if (op.valor() == "/"){
-      if (x == 0) return exp (token t(0));
+    if (op == "/"){
+      if (x == 0) return zer;
       if (y == 1) return e1;
       else if(e1.arrel().es_enter() and e2.arrel().es_enter()){
-        int res = x/y;
-        return exp (token t(res));
+         res = x/y;
+	  token fi(res);
+	  expressio alu(fi);
+          return alu;
       }
     }
-    if (op.valor() == "%"){
-      if (x == 0) return exp (token t(0));
-      if (y == 1) return exp (token t(0));
+    if (op == "%"){
+      if (x == 0) return zer;
+      if (y == 1) return zer;
       else if(e1.arrel().es_enter() and e2.arrel().es_enter()){
-        int res = x%y;
-        return exp (token t(res));
+          res = x%y;
+	  token fi(res);
+	  expressio alu(fi);
+          return alu;
       }
     }
-    if (op.valor() == "**"){
-      if (x == 0) return exp (token t(0));
-      if (x == 1) return exp (token t(1));
-      if (y == 0) return exp (token t(1));
+    if (op == "**"){
+      if (x == 0) return zer;
+      if (x == 1) return un;
+      if (y == 0) return un;
       if (y == 1) return e1;
       else if(e1.arrel().es_enter() and e2.arrel().es_enter()){
-        int res = pow(x,y);
-        return exp (token t(res));
+      	  res = pow(x,y);
+	  token fi(res);
+	  expressio alu(fi);
+          return alu;
       }
     }
-  return expressio aux (op, e1, e2);
+  expressio aux ( op, e1, e2);
+  return aux;
 }
 
-expressio::expressio avalua() const{
+expressio expressio:: avalua() const{
   // Pre: True
   // Post: Retorna l'expressió resultant d'avaluar l'expressió del p.i. tot el que es pugui
-    expressio fin, e1, e2;
+	token aux1;
+    expressio fin(aux1);
+	token aux2;
+    expressio e1(aux2);
+	token aux3;
+    expressio e2(aux3);
     if(not exp.es_buit()){
       if (not exp.fe().es_buit()){
-        exp.fe().avalua();
-        if (exp.arrel().es_operador_unari()) e1.avulua_operador_unari(exp.arrel(), exp.fe());
-        if ((exp.fe().es_enter() and exp.fd().es_enter()) or (exp.fe().es_variable() and exp.fd().es_variable())) e1.avalua_operador_aritmetic(exp.arrel(), exp.fe(), exp.fd());
-	if ((exp.fe().es_variable() and exp.fd().es_enter()) or (exp.fe().es_enter() and exp.fd().es_variable())) e1.avalua_operador_aritmetic(exp.arrel(), exp.fe(), exp.fd());
-        if (exp.fe().es_boolea() and exp.fd().es_boolea()) e1.avalua_operador_boolea(exp.arrel(), exp.fe(), exp.fd());
-        if (exp.arrel() == "==" or exp.arrel() == "!=") e1.avalua_operador_comparacio(exp.arrel(), exp.fe(), exp.fd());
+        this->fe().avalua();
+        if (exp.arrel().es_operador_unari()) e1 = avalua_operador_unari(exp.arrel(), this->fe());
+        if ((exp.fe().arrel().es_enter() and exp.fd().arrel().es_enter()) or (exp.fe().arrel().es_variable() and exp.fd().arrel().es_variable())) e1.avalua_operador_aritmetic(exp.arrel(), this->fe(), this->fd());
+	if ((exp.fe().arrel().es_variable() and exp.fd().arrel().es_enter()) or (exp.fe().arrel().es_enter() and exp.fd().arrel().es_variable())) e1.avalua_operador_aritmetic(exp.arrel(), this->fe(), this->fd());
+        if (exp.fe().arrel().es_boolea() and exp.fd().arrel().es_boolea()) e1.avalua_operador_boolea(exp.arrel(), this->fe(), this->fd());
+        if (exp.arrel() == "==" or exp.arrel() == "!=") e1.avalua_operador_comparacio(exp.arrel(), this->fe(), this->fd());
       }
       if (not exp.fd().es_buit()){
-        exp.fd().avalua();
-        if (exp.arrel().es_operador_unari()) e2.avulua_operador_unari(exp.arrel(), exp.fe());
-        if ((exp.fe().es_enter() and exp.fd().es_enter()) or (exp.fe().es_variable() and exp.fd().es_variable())) e2.avalua_operador_aritmetic(exp.arrel(), exp.fe(), exp.fd());
-	if ((exp.fe().es_variable() and exp.fd().es_enter()) or (exp.fe().es_enter() and exp.fd().es_variable())) e1.avalua_operador_aritmetic(exp.arrel(), exp.fe(), exp.fd());
-        if (e2.es_boolea()) e2.avalua_operador_boolea(exp.arrel(), exp.fe(), exp.fd());
-        if (e2.arrel() == "==" or e2.arrel() == "!=" ) e2.avalua_operador_comparacio(exp.arrel(), exp.fe(), exp.fd());
+        this->fd().avalua();
+        if (exp.arrel().es_operador_unari()) e2.avalua_operador_unari(exp.arrel(), this->fe());
+        if ((exp.fe().arrel().es_enter() and exp.fd().arrel().es_enter()) or (exp.fe().arrel().es_variable() and exp.fd().arrel().es_variable())) e2.avalua_operador_aritmetic(exp.arrel(), this->fe(), this->fd());
+	if ((exp.fe().arrel().es_variable() and exp.fd().arrel().es_enter()) or (exp.fe().arrel().es_enter() and exp.fd().arrel().es_variable())) e1.avalua_operador_aritmetic(exp.arrel(), this->fe(), this->fd());
+        if (e2.arrel().es_boolea()) e2.avalua_operador_boolea(exp.arrel(), this->fe(), this->fd());
+        if (e2.arrel() == "==" or e2.arrel() == "!=" ) e2.avalua_operador_comparacio(exp.arrel(), this->fe(), this->fd());
       }
-      fin(exp.arrel(), e1, e2);
+      expressio fina(exp.arrel(), e1, e2);
+      fin = fina;
   }
   return fin;
 }
@@ -311,6 +432,6 @@ expressio::expressio avalua() const{
 expressio expressio::expandeix(token t, const expressio &e) const{
   // Pre: t = TK és un token operand, e = E
   // Post: Retorna l'expressió resultant de canviar tots els tokens TK de l'expressió del p.i. per l'expressió E
-exp = e;
-return exp;
+expressio fin(t, e);
+return fin;
 }
