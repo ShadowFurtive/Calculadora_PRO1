@@ -7,8 +7,17 @@ int main() {
 	expressio expr(false);
 	string tipus;
 	string sortida; 
-	expr.llegir_postfixa(cin);
-	cout << expr.postfixa() << endl;
+	expr.llegir_infixa(cin);
+	cout<<" operand "<<expr.es_operand()<<endl;
+	list<token> l = expr.operands();
+	cout<<"adsa"<<endl;
+	cout<<expr.fe().arrel()<<endl;
+	cout<<expr.fd().arrel()<<endl;
+	expr = expr.avalua_operador_aritmetic(expr.arrel(), expr.fe(), expr.fd());
+	cout<<expr.arrel()<<endl;
+	for(list<token>::const_iterator it = l.begin(); it != l.end(); it++) cout << *it << " ";
+	cout << endl;
+	cout << expr.infixa() << endl;
 	/*while (cin >> tipus) { // Llegir format d'entrada
 		expr.llegir_postfixa(cin);
 		cout << expr.postfixa() << endl;
