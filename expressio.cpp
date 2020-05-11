@@ -58,7 +58,7 @@ expressio expressio::fe() const{
   // Post: Retorna l'expressió de l'esquerra del p.i.
   	arbreBin<token> aux = exp.fe();
 	 token t1(0);
-	 expressio fin(t1);	
+	 expressio fin(t1);
 	 fin.exp = arbreBin<token>(aux.arrel(), aux.fe(), aux.fd());
 	 return fin;
 }
@@ -68,7 +68,7 @@ expressio expressio::fd() const{
   // Post: Retorna l'expressió de la dreta del p.i.
 	 arbreBin<token> aux = exp.fd();
 	 token t1(0);
-	 expressio fin(t1);	
+	 expressio fin(t1);
 	 fin.exp = arbreBin<token>(aux.arrel(), aux.fe(), aux.fd());
 	 return fin;
 }
@@ -93,8 +93,8 @@ list<token> expressio::operands() const{
         arbreBin<token> a1 = p.top();
         p.pop();
         if (not a1.es_buit()) {
-            if (a1.fe().es_buit() and a1.fd().es_buit()) l.insert(it, a1.arrel()); 
-            else { 
+            if (a1.fe().es_buit() and a1.fd().es_buit()) l.insert(it, a1.arrel());
+            else {
                 if (not a1.fe().es_buit()) p.push(a1.fd());
                 if (not a1.fd().es_buit()) p.push(a1.fe());
             }
@@ -175,8 +175,8 @@ void expressio::llegir_infixa(istream& is){
 				}
 			}
 	}
-	
-	
+
+
 	while(not o.empty()){
 		if(o.top().es_operador_binari()){
 			arbreBin<token> a1 = arb.top();
@@ -287,32 +287,33 @@ string expressio::infixa() const{
 string expressio::postfixa() const{
   // Pre: True
   // Post: Retorna un string que conté l'expressió del p.i. amb notació postfixa,
-  //   cada element separat amb un espai
-	arbreBin<token> aux = exp;
-	stack<arbreBin<token>> auxiliar;
-	stack<token> col1, col;
-	string res;
-	while(not aux.es_buit() or not auxiliar.empty()){
-		while(not aux.es_buit()){
-			auxiliar.push(aux);
-			aux = aux.fe();
-		}
-		aux= auxiliar.top();
-		auxiliar.pop();
-		col.push(aux.arrel());
-		aux = aux.fd();
-	}
-	while (not col.empty()){
-		col1.push(col.top());
-		col.pop();
-	}
-	while (not col1.empty()){
-		string j = col1.top().to_string();
-		col1.pop();
-		res = res+j+" ";
-	}
-	return res;
+  //   cad,a element separat amb un espai
+  string j, res;
+  stack<arbreBin<token>> s1;
+  stack<arbreBin<token>> s2;
+  arbreBin<token> arb(exp);
+
+  s1.push(arb);
+
+  while (not s1.empty()){
+    arb = s1.top();
+    s1.pop();
+    if(not arb.fe().es_buit()){
+      s1.push(arb.fe());
+    }
+    if(not arb.fd().es_buit()){
+        s1.push(arb.fd());
+    }
+    s2.push(arb);
+  }
+  while (not s2.empty()){
+    j = s2.top().arrel().to_string();
+    s2.pop();
+    res = res+j+" ";
+  }
+  return res;
 }
+
 
 expressio expressio:: avalua_operador_unari(token op, expressio e){
   // Pre: op = OP és un operador unari, e = E
@@ -486,6 +487,65 @@ expressio expressio:: avalua() const{
 expressio expressio::expandeix(token t, const expressio &e) const{
   // Pre: t = TK és un token operand, e = E
   // Post: Retorna l'expressió resultant de canviar tots els tokens TK de l'expressió del p.i. per l'expressió E
-expressio fin(t, e);
-return fin;
+	arbreBin<token> a(exp);
+	arbreBin<token> b(e.exp);
+	token z(0);
+	expressio fin(z);
+	fin.exp = a;
+	if(not a.es_buit()){
+		if(not a.fe().es_buit()){
+			if(a.fe().arrel()==t){
+				a.fe()=b;
+			}
+			else fin.fe() = fin.fe().expandeix(t, e);
+		}
+		if(not a.fd().es_buit()){
+			if(a.fd().arrel()==t){
+				a.fd()=b;
+			}
+			else fin.fd() = fin.fd().expandeix(t,e);
+		}
+	}
+	fin.exp = a;
+	cout<<"arbol"<<a<<endl;
+	cout<<"expressio"<<fin.exp<<endl;
+	return fin;
 }
+			
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
