@@ -4,65 +4,42 @@ using namespace std;
 #include "expressio.hpp"
 
 int main() {
-	expressio expr(false);
-	string tipus;
-	string sortida;
-	string s="y",s1="+"; 
-	token t(s);
-	token t1(s1);
-	token t2(2);
-	expressio e1(t2);
-	expressio e2(t);
-	expressio er1( t1, e2, e1);
-	expr.llegir_infixa(cin);
-	cout<<" operand "<<expr.es_operand()<<endl;
-	list<token> l = expr.operands();
-	cout<<"adsa"<<endl;
-	cout<<expr.fe().arrel()<<endl;
-	cout<<expr.fd().arrel()<<endl;
-	expr = expr.expandeix(t, er1);
-	expr = expr.avalua_operador_aritmetic(expr.arrel(), expr.fe(), expr.fd());
-	cout<<expr.arrel()<<endl;
-	for(list<token>::const_iterator it = l.begin(); it != l.end(); it++) cout << *it << " ";
-	cout << endl;
-	cout << expr.infixa() << endl;
-	/*while (cin >> tipus) { // Llegir format d'entrada
-		expr.llegir_postfixa(cin);
-		cout << expr.postfixa() << endl;
-		if (tipus == "//"){
-			string s;
-			getline(cin, s); // Llegir la resta del comentari
-			cout << "//" << s << endl;
-		} 
-		else{
-			expr.llegir_postfixa(cin);
-			cout << expr.postfixa() << endl;
-			if (tipus == "INFIXA")  expr.llegir_infixa(cin);
-			else if (tipus == "POSTFIXA") expr.llegir_postfixa(cin);
-			expr = expr.avalua();
-			cin >> sortida;  // Llegir format de sortida.
-			if (sortida == "INFIXA") cout << expr.infixa() << endl;
-			else if (sortida == "POSTFIXA")
-			cout << expr.postfixa() << endl;
-			else if (sortida == "OPERANDS") {
-			list<token> l = expr.operands();
-			for(list<token>::const_iterator it = l.begin(); it != l.end(); it++) cout << *it << " ";
-			cout << endl;
-			} 
-			else if (sortida == "EXPANDEIX") {
-		// EXPANDEIX llegeix un token i una 2a expressió infixa,
-		// canvia els tokens de la 1a expressió per la 2a expressió
-		// i l'expressió resultant l'avalua i la mostra infixa
-			token t;
-			cin >> t;
-			expressio expr2(false);
-			expr2.llegir_infixa(cin);
-			expr = expr.expandeix(t, expr2).avalua();
-			cout << expr.infixa() << endl;
-			}
-		
-		}
-		
-	}
-	*/
+  expressio expr(false);
+  string tipus;
+  string sortida; 
+  while (cin >> tipus) { // Llegir format d'entrada
+    if (tipus == "//") {
+      string s;
+      getline(cin, s); // Llegir la resta del comentari
+      cout << "//" << s << endl;
+    } else {
+      if (tipus == "INFIXA") 
+        expr.llegir_infixa(cin); 
+      else if (tipus == "POSTFIXA") 
+        expr.llegir_postfixa(cin);
+      expr = expr.avalua();
+
+      cin >> sortida;  // Llegir format de sortida.
+       if (sortida == "INFIXA") 
+        cout << expr.infixa() << endl;
+       else if (sortida == "POSTFIXA")
+        cout << expr.postfixa() << endl;
+       else if (sortida == "OPERANDS") {
+        list<token> l = expr.operands();
+        for(list<token>::const_iterator it = l.begin(); it != l.end(); it++)
+          cout << *it << " ";
+        cout << endl;
+      } else if (sortida == "EXPANDEIX") {
+        // EXPANDEIX llegeix un token i una 2a expressió infixa,
+        // canvia els tokens de la 1a expressió per la 2a expressió
+        // i l'expressió resultant l'avalua i la mostra infixa
+        token t;
+        cin >> t;
+        expressio expr2(false);
+        expr2.llegir_infixa(cin);
+        expr = expr.expandeix(t, expr2).avalua();
+        cout << expr.infixa() << endl;
+      }
+    }
+  }
 }

@@ -39,13 +39,13 @@ x + 3 + 2 * y - 2 * y + 3 + x
 ( x + 12 ) / ( 12 + x )
 //
 // Llista d'OPERANDS
-a b a 
+a b 
 a b a b b 
-8 x x 8 
+8 x 0 x 8 
 18 
 x 12 12 x 
 b b a b a 
-8 x -1 x 8 
+8 x -1 x 8 0 
 0 
 x 3 2 y 2 y 3 x 
 //

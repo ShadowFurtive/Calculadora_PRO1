@@ -15,16 +15,16 @@
 	git config --global user.email "aqui_tu_correo_de_git"
 
 1.6. Inicialitza el repositorio
-	git init practica_PRO1
+	git init "nombre_de_repositorio"
 
 1.6.1 Entra al directori local
-	cd practica_PRO1
+	cd "nombre_de_repositorio"
 
 1.7. Añade el repositorio remoto
-	git remote add practica1 https://github.com/ShadowFurtive/Practica_PRO1
+	git remote add "nombre_del_grupo EJ:pr0" "aqui_tu_link_de_repositorio"
 
 1.8. Recibe en local los archivos remotos 
-	git pull practica1 master
+	git pull pr0 master
 
 2. PROGRAMA
 
@@ -41,7 +41,7 @@
 	git add * // para subir al repo todos los archivos que contengan cambios
 	git add [nombre_archivo] // para subgir al repo solo [nombre_archivo] si tiene cambios
 	git commit -m "[añomesdiahoraminutos]_[tu_nombre_o_alias]__[etiqueta_sintetica_y_descriptiva_de_la_aportacion_realizada]"
-	git push practica1 master
+	git push pr0 master
 
 4. IR AL PASO 2
 
@@ -55,7 +55,7 @@
 0. SOLO OCR. PARA REALIZAR RESTAURACIONES EN EL REPO
 
 0.1. Sincronizar con la rama principal
-	git pull --rebase activitat1 master
+	git pull --rebase pr0 master
 
 0.2 Restaurar archivos
 	git log --oneline o chequeamos los commits desde la web
