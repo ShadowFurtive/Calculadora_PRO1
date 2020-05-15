@@ -9,7 +9,7 @@ using namespace std;
 /* La classe "expressio" permet guardar i avaluar una expressió aritmètica o booleana */
 
 class expressio {
-  public:
+  public: 
   expressio(const token &t);
   // Pre: t = TK és un token operand
   // Post: Crea una expressió formada per operand TK
@@ -98,7 +98,7 @@ class expressio {
   // Post: Retorna l'expressió resultant de canviar tots els tokens TK de l'expressió del p.i. per l'expressió E
 
   private:
-    // Cal definir els atributs i mètodes privats dins del fitxer .rep
+    // Cal definir els atributs i mètodes privats dins del fitxer .rep 
     #include "expressio.rep"
 };
 

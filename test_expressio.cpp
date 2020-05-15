@@ -13,18 +13,19 @@ int main() {
       getline(cin, s); // Llegir la resta del comentari
       cout << "//" << s << endl;
     } else {
-      if (tipus == "INFIXA") 
-        expr.llegir_infixa(cin); 
+      if (tipus == "INFIXA")
+        expr.llegir_infixa(cin);
       else if (tipus == "POSTFIXA") 
         expr.llegir_postfixa(cin);
+
       expr = expr.avalua();
 
       cin >> sortida;  // Llegir format de sortida.
-       if (sortida == "INFIXA") 
+      if (sortida == "INFIXA")
         cout << expr.infixa() << endl;
-       else if (sortida == "POSTFIXA")
+      else if (sortida == "POSTFIXA")
         cout << expr.postfixa() << endl;
-       else if (sortida == "OPERANDS") {
+      else if (sortida == "OPERANDS") {
         list<token> l = expr.operands();
         for(list<token>::const_iterator it = l.begin(); it != l.end(); it++)
           cout << *it << " ";
