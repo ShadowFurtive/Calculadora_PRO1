@@ -1,0 +1,325 @@
+// De POSTFIXA a POSTFIXA
+POSTFIXA -1234567890 -> POSTFIXA
+POSTFIXA T -> POSTFIXA
+POSTFIXA x -> POSTFIXA
+POSTFIXA a not not not not -> POSTFIXA
+POSTFIXA a b c d e != == or and -> POSTFIXA
+POSTFIXA aa bb cc dd ee != == or and -> POSTFIXA
+POSTFIXA a b c d e / * - + -> POSTFIXA
+POSTFIXA a1 b2 c3 d4 e5 / * - + -> POSTFIXA
+//
+// De POSTFIXA a INFIXA
+POSTFIXA -1234567890 -> INFIXA
+POSTFIXA T -> INFIXA
+POSTFIXA x -> INFIXA
+POSTFIXA a not not not not -> INFIXA
+POSTFIXA a b c d e != == or and -> INFIXA
+POSTFIXA aa bb cc dd ee != == or and -> INFIXA
+POSTFIXA a b c d e / * - + -> INFIXA
+POSTFIXA a1 b2 c3 d4 e5 / * - + -> INFIXA
+//
+// De INFIXA a POSTFIXA
+INFIXA ( 2 + 5 ) * 3 + 1 -> POSTFIXA
+INFIXA 2 + 5 * 3 + 1 -> POSTFIXA
+INFIXA ( a and ( b or ( not ( T and a ) ) ) ) -> POSTFIXA
+INFIXA ( a and ( b or ( not T and a ) ) ) -> POSTFIXA
+INFIXA ( a and ( b or not T and a ) ) -> POSTFIXA
+INFIXA ( a and b or not T and a ) -> POSTFIXA
+INFIXA a and b or not T and a -> POSTFIXA
+INFIXA ( ( F or a ) or b ) and ( a or ( b and b ) ) -> POSTFIXA
+INFIXA ( F or a or b ) and ( a or b and b ) -> POSTFIXA
+INFIXA F or a or b and a or b and b -> POSTFIXA
+INFIXA ( 12 - 9 ) / ( ( 23 + 5 ) * -2 ) -> POSTFIXA
+INFIXA ( 12 - 9 ) / ( 23 + 5 * -2 ) -> POSTFIXA
+INFIXA ( 12 - 9 ) / 23 + 5 * -2 -> POSTFIXA
+INFIXA 12 - 9 / ( 23 + 5 * -2 ) -> POSTFIXA
+INFIXA 12 - 9 / 23 + 5 * -2 -> POSTFIXA
+INFIXA ( ( x + 3 ) + ( 2 * y ) ) - ( ( 2 * y ) + ( 3 + x ) ) -> POSTFIXA
+INFIXA ( x + 3 + 2 * y ) - ( 2 * y + 3 + x ) -> POSTFIXA
+INFIXA x + 3 + 2 * y - 2 * y + 3 + x -> POSTFIXA
+INFIXA ( x + 12 ) + ( 12 + x ) -> POSTFIXA
+INFIXA ( x + 12 ) + 0 -> POSTFIXA
+INFIXA 0 + ( 12 + x ) -> POSTFIXA
+INFIXA ( x + 12 ) - ( 12 + x ) -> POSTFIXA
+INFIXA ( x + 12 ) - 0 -> POSTFIXA
+INFIXA ( x + 12 ) * ( 12 + x ) -> POSTFIXA
+INFIXA ( x + 12 ) * 0 -> POSTFIXA
+INFIXA 0 * ( 12 + x ) -> POSTFIXA
+INFIXA ( x + 12 ) * 1 -> POSTFIXA
+INFIXA 1 * ( 12 + x ) -> POSTFIXA
+INFIXA ( x + 12 ) / ( 12 + x ) -> POSTFIXA
+INFIXA ( x + 12 ) / 1 -> POSTFIXA
+INFIXA 0 / ( 12 + x ) -> POSTFIXA
+INFIXA ( ( T == c ) or d ) and e -> POSTFIXA
+INFIXA ( T == ( c or d ) ) and e -> POSTFIXA
+INFIXA T == ( c or d and e ) -> POSTFIXA
+INFIXA T == c or d and e -> POSTFIXA
+INFIXA aa and ( bb or ( cc == T ) ) -> POSTFIXA
+INFIXA aa and ( ( bb or cc ) == T ) -> POSTFIXA
+INFIXA ( aa and bb or cc ) == T -> POSTFIXA
+INFIXA aa and bb or cc == T -> POSTFIXA
+INFIXA ( ( ( a / b ) * c ) - d ) + e -> POSTFIXA
+INFIXA ( ( a / b * c ) - d ) + e -> POSTFIXA
+INFIXA ( a / b * c - d ) + e -> POSTFIXA
+INFIXA a / b * c - d + e -> POSTFIXA
+INFIXA a / b * c - ( d + e ) -> POSTFIXA
+INFIXA a / b * ( c - ( d + e ) ) -> POSTFIXA
+INFIXA a / ( b * ( c - ( d + e ) ) ) -> POSTFIXA
+INFIXA a1 + ( b2 - ( c3 * ( d4 / e5 ) ) ) -> POSTFIXA
+INFIXA a1 + ( b2 - ( c3 * d4 / e5 ) ) -> POSTFIXA
+INFIXA a1 + ( b2 - c3 * d4 / e5 ) -> POSTFIXA
+INFIXA a1 + b2 - c3 * d4 / e5 -> POSTFIXA
+INFIXA a1 + ( b2 - c3 ) * d4 / e5 -> POSTFIXA
+INFIXA ( a1 + ( b2 - c3 ) ) * d4 / e5 -> POSTFIXA
+INFIXA ( a1 + ( b2 - c3 ) ) * ( d4 / e5 ) -> POSTFIXA
+INFIXA ( c and d ) and ( a and b ) -> POSTFIXA
+INFIXA c and d and a and b -> POSTFIXA
+INFIXA not ( c and d ) and not ( a and b ) -> POSTFIXA
+INFIXA not not ( c and d ) and not not ( a and b ) -> POSTFIXA
+INFIXA not c and not d and not a and not b -> POSTFIXA
+INFIXA not not c and not not d and not not a and not not b -> POSTFIXA
+//
+// De INFIXA a INFIXA
+INFIXA ( 2 + 5 ) * 3 + 1 -> INFIXA
+INFIXA 2 + 5 * 3 + 1 -> INFIXA
+INFIXA ( a and ( b or ( not ( T and a ) ) ) ) -> INFIXA
+INFIXA ( a and ( b or ( not T and a ) ) ) -> INFIXA
+INFIXA ( a and ( b or not T and a ) ) -> INFIXA
+INFIXA ( a and b or not T and a ) -> INFIXA
+INFIXA a and b or not T and a -> INFIXA
+INFIXA ( ( F or a ) or b ) and ( a or ( b and b ) ) -> INFIXA
+INFIXA ( F or a or b ) and ( a or b and b ) -> INFIXA
+INFIXA F or a or b and a or b and b -> INFIXA
+INFIXA ( 12 - 9 ) / ( ( 23 + 5 ) * -2 ) -> INFIXA
+INFIXA ( 12 - 9 ) / ( 23 + 5 * -2 ) -> INFIXA
+INFIXA ( 12 - 9 ) / 23 + 5 * -2 -> INFIXA
+INFIXA 12 - 9 / ( 23 + 5 * -2 ) -> INFIXA
+INFIXA 12 - 9 / 23 + 5 * -2 -> INFIXA
+INFIXA ( ( x + 3 ) + ( 2 * y ) ) - ( ( 2 * y ) + ( 3 + x ) ) -> INFIXA
+INFIXA ( x + 3 + 2 * y ) - ( 2 * y + 3 + x ) -> INFIXA
+INFIXA x + 3 + 2 * y - 2 * y + 3 + x -> INFIXA
+INFIXA ( x + 12 ) + ( 12 + x ) -> INFIXA
+INFIXA ( x + 12 ) + 0 -> INFIXA
+INFIXA 0 + ( 12 + x ) -> INFIXA
+INFIXA ( x + 12 ) - ( 12 + x ) -> INFIXA
+INFIXA ( x + 12 ) - 0 -> INFIXA
+INFIXA ( x + 12 ) * ( 12 + x ) -> INFIXA
+INFIXA ( x + 12 ) * 0 -> INFIXA
+INFIXA 0 * ( 12 + x ) -> INFIXA
+INFIXA ( x + 12 ) * 1 -> INFIXA
+INFIXA 1 * ( 12 + x ) -> INFIXA
+INFIXA ( x + 12 ) / ( 12 + x ) -> INFIXA
+INFIXA ( x + 12 ) / 1 -> INFIXA
+INFIXA 0 / ( 12 + x ) -> INFIXA
+INFIXA ( ( T == c ) or d ) and e -> INFIXA
+INFIXA ( T == ( c or d ) ) and e -> INFIXA
+INFIXA T == ( c or d and e ) -> INFIXA
+INFIXA T == c or d and e -> INFIXA
+INFIXA aa and ( bb or ( cc == T ) ) -> INFIXA
+INFIXA aa and ( ( bb or cc ) == T ) -> INFIXA
+INFIXA ( aa and bb or cc ) == T -> INFIXA
+INFIXA aa and bb or cc == T -> INFIXA
+INFIXA ( ( ( a / b ) * c ) - d ) + e -> INFIXA
+INFIXA ( ( a / b * c ) - d ) + e -> INFIXA
+INFIXA ( a / b * c - d ) + e -> INFIXA
+INFIXA a / b * c - d + e -> INFIXA
+INFIXA a / b * c - ( d + e ) -> INFIXA
+INFIXA a / b * ( c - ( d + e ) ) -> INFIXA
+INFIXA a / ( b * ( c - ( d + e ) ) ) -> INFIXA
+INFIXA a1 + ( b2 - ( c3 * ( d4 / e5 ) ) ) -> INFIXA
+INFIXA a1 + ( b2 - ( c3 * d4 / e5 ) ) -> INFIXA
+INFIXA a1 + ( b2 - c3 * d4 / e5 ) -> INFIXA
+INFIXA a1 + b2 - c3 * d4 / e5 -> INFIXA
+INFIXA a1 + ( b2 - c3 ) * d4 / e5 -> INFIXA
+INFIXA ( a1 + ( b2 - c3 ) ) * d4 / e5 -> INFIXA
+INFIXA ( a1 + ( b2 - c3 ) ) * ( d4 / e5 ) -> INFIXA
+INFIXA ( c and d ) and ( a and b ) -> INFIXA
+INFIXA c and d and a and b -> INFIXA
+INFIXA not ( c and d ) and not ( a and b ) -> INFIXA
+INFIXA not not ( c and d ) and not not ( a and b ) -> INFIXA
+INFIXA not c and not d and not a and not b -> INFIXA
+INFIXA not not c and not not d and not not a and not not b -> INFIXA
+//
+// Llista d'OPERANDS
+INFIXA ( 2 + 5 ) * 3 + 1 -> OPERANDS
+INFIXA 2 + 5 * 3 + 1 -> OPERANDS
+INFIXA ( a and ( b or ( not ( T and a ) ) ) ) -> OPERANDS
+INFIXA ( a and ( b or ( not T and a ) ) ) -> OPERANDS
+INFIXA ( a and ( b or not T and a ) ) -> OPERANDS
+INFIXA ( a and b or not T and a ) -> OPERANDS
+INFIXA a and b or not T and a -> OPERANDS
+INFIXA ( ( F or a ) or b ) and ( a or ( b and b ) ) -> OPERANDS
+INFIXA ( F or a or b ) and ( a or b and b ) -> OPERANDS
+INFIXA F or a or b and a or b and b -> OPERANDS
+INFIXA ( 12 - 9 ) / ( ( 23 + 5 ) * -2 ) -> OPERANDS
+INFIXA ( 12 - 9 ) / ( 23 + 5 * -2 ) -> OPERANDS
+INFIXA ( 12 - 9 ) / 23 + 5 * -2 -> OPERANDS
+INFIXA 12 - 9 / ( 23 + 5 * -2 ) -> OPERANDS
+INFIXA 12 - 9 / 23 + 5 * -2 -> OPERANDS
+INFIXA ( ( x + 3 ) + ( 2 * y ) ) - ( ( 2 * y ) + ( 3 + x ) ) -> OPERANDS
+INFIXA ( x + 3 + 2 * y ) - ( 2 * y + 3 + x ) -> OPERANDS
+INFIXA x + 3 + 2 * y - 2 * y + 3 + x -> OPERANDS
+INFIXA ( x + 12 ) + ( 12 + x ) -> OPERANDS
+INFIXA ( x + 12 ) + 0 -> OPERANDS
+INFIXA 0 + ( 12 + x ) -> OPERANDS
+INFIXA ( x + 12 ) - ( 12 + x ) -> OPERANDS
+INFIXA ( x + 12 ) - 0 -> OPERANDS
+INFIXA ( x + 12 ) * ( 12 + x ) -> OPERANDS
+INFIXA ( x + 12 ) * 0 -> OPERANDS
+INFIXA 0 * ( 12 + x ) -> OPERANDS
+INFIXA ( x + 12 ) * 1 -> OPERANDS
+INFIXA 1 * ( 12 + x ) -> OPERANDS
+INFIXA ( x + 12 ) / ( 12 + x ) -> OPERANDS
+INFIXA ( x + 12 ) / 1 -> OPERANDS
+INFIXA 0 / ( 12 + x ) -> OPERANDS
+INFIXA ( ( T == c ) or d ) and e -> OPERANDS
+INFIXA ( T == ( c or d ) ) and e -> OPERANDS
+INFIXA T == ( c or d and e ) -> OPERANDS
+INFIXA T == c or d and e -> OPERANDS
+INFIXA aa and ( bb or ( cc == T ) ) -> OPERANDS
+INFIXA aa and ( ( bb or cc ) == T ) -> OPERANDS
+INFIXA ( aa and bb or cc ) == T -> OPERANDS
+INFIXA aa and bb or cc == T -> OPERANDS
+INFIXA ( ( ( a / b ) * c ) - d ) + e -> OPERANDS
+INFIXA ( ( a / b * c ) - d ) + e -> OPERANDS
+INFIXA ( a / b * c - d ) + e -> OPERANDS
+INFIXA a / b * c - d + e -> OPERANDS
+INFIXA a / b * c - ( d + e ) -> OPERANDS
+INFIXA a / b * ( c - ( d + e ) ) -> OPERANDS
+INFIXA a / ( b * ( c - ( d + e ) ) ) -> OPERANDS
+INFIXA a1 + ( b2 - ( c3 * ( d4 / e5 ) ) ) -> OPERANDS
+INFIXA a1 + ( b2 - ( c3 * d4 / e5 ) ) -> OPERANDS
+INFIXA a1 + ( b2 - c3 * d4 / e5 ) -> OPERANDS
+INFIXA a1 + b2 - c3 * d4 / e5 -> OPERANDS
+INFIXA a1 + ( b2 - c3 ) * d4 / e5 -> OPERANDS
+INFIXA ( a1 + ( b2 - c3 ) ) * d4 / e5 -> OPERANDS
+INFIXA ( a1 + ( b2 - c3 ) ) * ( d4 / e5 ) -> OPERANDS
+INFIXA ( c and d ) and ( a and b ) -> OPERANDS
+INFIXA c and d and a and b -> OPERANDS
+INFIXA not ( c and d ) and not ( a and b ) -> OPERANDS
+INFIXA not not ( c and d ) and not not ( a and b ) -> OPERANDS
+INFIXA not c and not d and not a and not b -> OPERANDS
+INFIXA not not c and not not d and not not a and not not b -> OPERANDS
+//
+// EXPANDEIX llegeix un token i una 2a expressió,
+// canvia els tokens de la 1a expressió per la 2a expressió
+// i l'expressió resultant l'avalua i la mostra infixa
+INFIXA ( 2 + 5 ) * 3 + 1 -> EXPANDEIX a b ->
+INFIXA 2 + 5 * 3 + 1 -> EXPANDEIX a b ->
+INFIXA ( a and ( b or ( not ( T and a ) ) ) ) -> EXPANDEIX a b ->
+INFIXA ( a and ( b or ( not T and a ) ) ) -> EXPANDEIX a b ->
+INFIXA ( a and ( b or not T and a ) ) -> EXPANDEIX a b ->
+INFIXA ( a and b or not T and a ) -> EXPANDEIX a b ->
+INFIXA a and b or not T and a -> EXPANDEIX a b ->
+INFIXA ( ( F or a ) or b ) and ( a or ( b and b ) ) -> EXPANDEIX a b ->
+INFIXA ( F or a or b ) and ( a or b and b ) -> EXPANDEIX a b ->
+INFIXA F or a or b and a or b and b -> EXPANDEIX a b ->
+INFIXA ( 12 - 9 ) / ( ( 23 + 5 ) * -2 ) -> EXPANDEIX a b ->
+INFIXA ( 12 - 9 ) / ( 23 + 5 * -2 ) -> EXPANDEIX a b ->
+INFIXA ( 12 - 9 ) / 23 + 5 * -2 -> EXPANDEIX a b ->
+INFIXA 12 - 9 / ( 23 + 5 * -2 ) -> EXPANDEIX a b ->
+INFIXA 12 - 9 / 23 + 5 * -2 -> EXPANDEIX a b ->
+INFIXA ( ( x + 3 ) + ( 2 * y ) ) - ( ( 2 * y ) + ( 3 + x ) ) -> EXPANDEIX x y ->
+INFIXA ( x + 3 + 2 * y ) - ( 2 * y + 3 + x ) -> EXPANDEIX x y ->
+INFIXA x + 3 + 2 * y - 2 * y + 3 + x -> EXPANDEIX x y ->
+INFIXA ( x + 12 ) + ( 12 + x ) -> EXPANDEIX x y ->
+INFIXA ( x + 12 ) + 0 -> EXPANDEIX x y ->
+INFIXA 0 + ( 12 + x ) -> EXPANDEIX x y ->
+INFIXA ( x + 12 ) - ( 12 + x ) -> EXPANDEIX x y ->
+INFIXA ( x + 12 ) - 0 -> EXPANDEIX x y ->
+INFIXA ( x + 12 ) * ( 12 + x ) -> EXPANDEIX x y ->
+INFIXA ( x + 12 ) * 0 -> EXPANDEIX x y ->
+INFIXA 0 * ( 12 + x ) -> EXPANDEIX x y ->
+INFIXA ( x + 12 ) * 1 -> EXPANDEIX x y ->
+INFIXA 1 * ( 12 + x ) -> EXPANDEIX x y ->
+INFIXA ( x + 12 ) / ( 12 + x ) -> EXPANDEIX x y ->
+INFIXA ( x + 12 ) / 1 -> EXPANDEIX x y ->
+INFIXA 0 / ( 12 + x ) -> EXPANDEIX x y ->
+INFIXA ( ( T == c ) or d ) and e -> EXPANDEIX c d ->
+INFIXA ( T == ( c or d ) ) and e -> EXPANDEIX c d ->
+INFIXA T == ( c or d and e ) -> EXPANDEIX c d ->
+INFIXA T == c or d and e -> EXPANDEIX c d ->
+INFIXA aa and ( bb or ( cc == T ) ) -> EXPANDEIX aa bb ->
+INFIXA aa and ( ( bb or cc ) == T ) -> EXPANDEIX aa bb ->
+INFIXA ( aa and bb or cc ) == T -> EXPANDEIX aa bb ->
+INFIXA aa and bb or cc == T -> EXPANDEIX aa bb ->
+INFIXA ( ( ( a / b ) * c ) - d ) + e -> EXPANDEIX a b ->
+INFIXA ( ( a / b * c ) - d ) + e -> EXPANDEIX a b ->
+INFIXA ( a / b * c - d ) + e -> EXPANDEIX a b ->
+INFIXA a / b * c - d + e -> EXPANDEIX a b ->
+INFIXA a / b * c - ( d + e ) -> EXPANDEIX a b ->
+INFIXA a / b * ( c - ( d + e ) ) -> EXPANDEIX a b ->
+INFIXA a / ( b * ( c - ( d + e ) ) ) -> EXPANDEIX a b ->
+INFIXA a1 + ( b2 - ( c3 * ( d4 / e5 ) ) ) -> EXPANDEIX a1 b2 ->
+INFIXA a1 + ( b2 - ( c3 * d4 / e5 ) ) -> EXPANDEIX a1 b2 ->
+INFIXA a1 + ( b2 - c3 * d4 / e5 ) -> EXPANDEIX a1 b2 ->
+INFIXA a1 + b2 - c3 * d4 / e5 -> EXPANDEIX a1 b2 ->
+INFIXA a1 + ( b2 - c3 ) * d4 / e5 -> EXPANDEIX a1 b2 ->
+INFIXA ( a1 + ( b2 - c3 ) ) * d4 / e5 -> EXPANDEIX a1 b2 ->
+INFIXA ( a1 + ( b2 - c3 ) ) * ( d4 / e5 ) -> EXPANDEIX a1 b2 ->
+INFIXA ( c and d ) and ( a and b ) -> EXPANDEIX a b ->
+INFIXA c and d and a and b -> EXPANDEIX a b ->
+INFIXA not ( c and d ) and not ( a and b ) -> EXPANDEIX a b ->
+INFIXA not not ( c and d ) and not not ( a and b ) -> EXPANDEIX a b ->
+INFIXA not c and not d and not a and not b -> EXPANDEIX a b ->
+INFIXA not not c and not not d and not not a and not not b -> EXPANDEIX a b ->
+//
+INFIXA ( 2 + 5 ) * 3 + 1 -> EXPANDEIX a a and b ->
+INFIXA 2 + 5 * 3 + 1 -> EXPANDEIX a a and b ->
+INFIXA ( a and ( b or ( not ( T and a ) ) ) ) -> EXPANDEIX a a and b ->
+INFIXA ( a and ( b or ( not T and a ) ) ) -> EXPANDEIX a a and b ->
+INFIXA ( a and ( b or not T and a ) ) -> EXPANDEIX a a and b ->
+INFIXA ( a and b or not T and a ) -> EXPANDEIX a a and b ->
+INFIXA a and b or not T and a -> EXPANDEIX a a and b ->
+INFIXA ( ( F or a ) or b ) and ( a or ( b and b ) ) -> EXPANDEIX a a and b ->
+INFIXA ( F or a or b ) and ( a or b and b ) -> EXPANDEIX a a and b ->
+INFIXA F or a or b and a or b and a and b -> EXPANDEIX a a and b ->
+INFIXA ( 12 - 9 ) / ( ( 23 + 5 ) * -2 ) -> EXPANDEIX a a and b ->
+INFIXA ( 12 - 9 ) / ( 23 + 5 * -2 ) -> EXPANDEIX a a and b ->
+INFIXA ( 12 - 9 ) / 23 + 5 * -2 -> EXPANDEIX a a and b ->
+INFIXA 12 - 9 / ( 23 + 5 * -2 ) -> EXPANDEIX a a and b ->
+INFIXA 12 - 9 / 23 + 5 * -2 -> EXPANDEIX a a and b ->
+INFIXA ( ( x + 3 ) + ( 2 * y ) ) - ( ( 2 * y ) + ( 3 + x ) ) -> EXPANDEIX x x * 2 + 3 ->
+INFIXA ( x + 3 + 2 * y ) - ( 2 * y + 3 + x ) -> EXPANDEIX x x * 2 + 3 ->
+INFIXA x + 3 + 2 * y - 2 * y + 3 + x -> EXPANDEIX x x * 2 + 3 ->
+INFIXA ( x + 12 ) + ( 12 + x ) -> EXPANDEIX x x * 2 + 3 ->
+INFIXA ( x + 12 ) + 0 -> EXPANDEIX x x * 2 + 3 ->
+INFIXA 0 + ( 12 + x ) -> EXPANDEIX x x * 2 + 3 ->
+INFIXA ( x + 12 ) - ( 12 + x ) -> EXPANDEIX x x * 2 + 3 ->
+INFIXA ( x + 12 ) - 0 -> EXPANDEIX x x * 2 + 3 ->
+INFIXA ( x + 12 ) * ( 12 + x ) -> EXPANDEIX x x * 2 + 3 ->
+INFIXA ( x + 12 ) * 0 -> EXPANDEIX x x * 2 + 3 ->
+INFIXA 0 * ( 12 + x ) -> EXPANDEIX x x * 2 + 3 ->
+INFIXA ( x + 12 ) * 1 -> EXPANDEIX x x * 2 + 3 ->
+INFIXA 1 * ( 12 + x ) -> EXPANDEIX x x * 2 + 3 ->
+INFIXA ( x + 12 ) / ( 12 + x ) -> EXPANDEIX x x * 2 + 3 ->
+INFIXA ( x + 12 ) / 1 -> EXPANDEIX x x * 2 + 3 ->
+INFIXA 0 / ( 12 + x ) -> EXPANDEIX x x * 2 + 3 ->
+INFIXA ( ( T == c ) or d ) and e -> EXPANDEIX c c or d ->
+INFIXA ( T == ( c or d ) ) and e -> EXPANDEIX c c or d ->
+INFIXA T == ( c or d and e ) -> EXPANDEIX c c or d ->
+INFIXA T == c or d and e -> EXPANDEIX c c or d ->
+INFIXA aa and ( bb or ( cc == T ) ) -> EXPANDEIX aa aa or bb or cc ->
+INFIXA aa and ( ( bb or cc ) == T ) -> EXPANDEIX aa aa or bb or cc ->
+INFIXA ( aa and bb or cc ) == T -> EXPANDEIX aa aa or bb or cc ->
+INFIXA aa and bb or cc == T -> EXPANDEIX aa aa or bb or cc ->
+INFIXA ( ( ( a / b ) * c ) - d ) + e -> EXPANDEIX a a - 1 ->
+INFIXA ( ( a / b * c ) - d ) + e -> EXPANDEIX a a - 1 ->
+INFIXA ( a / b * c - d ) + e -> EXPANDEIX a a - 1 ->
+INFIXA a / b * c - d + e -> EXPANDEIX a a - 1 ->
+INFIXA a / b * c - ( d + e ) -> EXPANDEIX a a - 1 ->
+INFIXA a / b * ( c - ( d + e ) ) -> EXPANDEIX a a - 1 ->
+INFIXA a / ( b * ( c - ( d + e ) ) ) -> EXPANDEIX a a - 1 ->
+INFIXA a1 + ( b2 - ( c3 * ( d4 / e5 ) ) ) -> EXPANDEIX a1 a1 * 0 ->
+INFIXA a1 + ( b2 - ( c3 * d4 / e5 ) ) -> EXPANDEIX a1 a1 * 0 ->
+INFIXA a1 + ( b2 - c3 * d4 / e5 ) -> EXPANDEIX a1 a1 * 0 ->
+INFIXA a1 + b2 - c3 * d4 / e5 -> EXPANDEIX a1 a1 * 0 ->
+INFIXA a1 + ( b2 - c3 ) * d4 / e5 -> EXPANDEIX a1 a1 * 0 ->
+INFIXA ( a1 + ( b2 - c3 ) ) * d4 / e5 -> EXPANDEIX a1 a1 * 0 ->
+INFIXA ( a1 + ( b2 - c3 ) ) * ( d4 / e5 ) -> EXPANDEIX a1 a1 * 0 ->
+INFIXA ( c and d ) and ( a and b ) -> EXPANDEIX a b == b ->
+INFIXA c and d and a and b -> EXPANDEIX a b == b ->
+INFIXA not ( c and d ) and not ( a and b ) -> EXPANDEIX a b == b ->
+INFIXA not not ( c and d ) and not not ( a and b ) -> EXPANDEIX a b == b ->
+INFIXA not c and not d and not a and not b -> EXPANDEIX a b == b ->
+INFIXA not not c and not not d and not not a and not not b -> EXPANDEIX a b == b ->

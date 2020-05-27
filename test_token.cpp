@@ -85,7 +85,7 @@ int main() {
   cout << "Valor string: " << t6.to_string() << endl;
   cout << "Prioritat: " << t6.prioritat().first << " " << t6.prioritat().second << endl;
   cout << "=============================" << endl;
-  
+
   cout << t2 << " i " << t2 << " són iguals: " << (t2 == t2) << endl;
   cout << t2 << " i " << t3 << " són iguals: " << (t2 == t3) << endl;
   cout << t2 << " i " << t2 << " són diferents: " << (t2 != t2) << endl;

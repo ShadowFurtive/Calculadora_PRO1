@@ -1,5 +1,5 @@
 #include "token.hpp"
-#include <string>
+#include "string"
 #include <stdio.h>
 #include <string.h>
 
@@ -18,17 +18,17 @@ token::token(int i){
 // Post: Crea un token a partir de l'enter I
 	bool negatiu=false;
 	string aux="";
-	int temp;
+	int num;
 	if(i<0){
 		i=i*-1;
 		negatiu=true;
 		aux="-";
 	}
 	while(i/10!=0){
-		temp=i%10;
+		num=i%10;
 		i= i/10;
-		temp =temp + 48;
-		valor = (char)temp + valor;
+		num =num + 48;
+		valor = (char)num + valor;
 	}
 	i=i+48;
 	if(not negatiu) valor = (char)i + valor ;
@@ -63,10 +63,6 @@ token::token(const token &t){
 	valor=t.valor;
 }
 
-token::~token(){
-// Pre: True
-// Post: S'ha destruït el token del p.i. (destructora)
-}
 
 token& token:: operator=(const token &e){
 // Pre: t = TK
@@ -75,6 +71,11 @@ token& token:: operator=(const token &e){
 		valor=e.valor;
 	}
 	return *this;
+}
+
+token::~token(){
+// Pre: True
+// Post: S'ha destruït el token del p.i. (destructora)
 }
 
 bool token::es_operador_unari() const{
@@ -249,8 +250,6 @@ ostream& operator<<(ostream& os, const token &t){
 	return os;
 }
 
-
-	
 
 
 
