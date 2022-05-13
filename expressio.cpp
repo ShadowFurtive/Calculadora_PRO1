@@ -237,13 +237,13 @@ string expressio::infixa() const{
 			if((res1.first < res.first ) or ((res.first==res1.first) and not aux.arrel().es_operador_commutatiu() and not res.second)){
 				s = s + "( ";
 				s = s + aux.fe().infixa();
-				  /* HI: Retorna un string que conté l'expressió del fil esquerre del p.i. amb notació infixa
+				  /* HI: Retorna un string que conté l'expressió del fil esquerre de aux amb notació infixa
  				   amb el mínim nombre de parèntesis, cada element separat amb un espai */
 				  /* FITA: El nº de elemenets restants en el subarbre esquerre */
 				s = s + " )";
 			}
 			else s = s + aux.fe().infixa();
-			/* HI: Retorna un string que conté l'expressió del fil esquerre del p.i. amb notació infixa
+			/* HI: Retorna un string que conté l'expressió del fil esquerre de aux amb notació infixa
 			   amb el mínim nombre de parèntesis, cada element separat amb un espai */
 			  /* FITA: El nº de elemenets restants en el subarbre esquerre */
 		}
@@ -257,13 +257,13 @@ string expressio::infixa() const{
 					if((res1.first < res.first ) or ((res.first==res1.first) and not aux.arrel().es_operador_commutatiu() and res.second)){
 						s = s + "( ";
 						s = s + aux.fd().infixa();
-						/* HI: Retorna un string que conté l'expressió del fil dret del p.i. amb notació infixa
+						/* HI: Retorna un string que conté l'expressió del fil dret de aux amb notació infixa
 		 				   amb el mínim nombre de parèntesis, cada element separat amb un espai */
 						/* FITA: El nº de elemenets restants en el subarbre dret */
 						s = s + " )";
 					}
 					else s = s + aux.fd().infixa();
-					/* HI: Retorna un string que conté l'expressió del fil dret del p.i. amb notació infixa
+					/* HI: Retorna un string que conté l'expressió del fil dret de aux amb notació infixa
 	 				   amb el mínim nombre de parèntesis, cada element separat amb un espai */
 					  /* FITA: El nº de elemenets restants en el subarbre dret */
 					
@@ -279,7 +279,7 @@ string expressio::infixa() const{
 string expressio::postfixa() const{
   // Pre: True
   // Post: Retorna un string que conté l'expressió del p.i. amb notació postfixa,
-  //   cad,a element separat amb un espai
+  //   cada element separat amb un espai
 	string res;
 	stack<arbreBin<token>> s1, s2;
 	arbreBin<token> arb(exp);
@@ -326,8 +326,8 @@ expressio expressio:: avalua_operador_boolea(token op, expressio e1, expressio e
 	expressio tr(t2);
 	if (op == "and"){
 		if(e1.arrel()=="F" or e2.arrel()=="F") return fa;
-		else if(e1.arrel()=="T" and (e2.arrel().es_variable() or e2.arrel().es_enter())) return e2;
-		else if(e2.arrel()=="T" and (e1.arrel().es_variable() or e1.arrel().es_enter())) return e1;
+		else if(e1.arrel()=="T" and not e2.arrel().es_boolea()) return e2;
+		else if(e2.arrel()=="T" and not e1.arrel().es_boolea()) return e1;
 		else if(e1.arrel().es_boolea() and e2.arrel().es_boolea()){
 			bool a = e1.arrel().to_bool();
 			bool b = e2.arrel().to_bool();
@@ -337,8 +337,8 @@ expressio expressio:: avalua_operador_boolea(token op, expressio e1, expressio e
 	}
 	else if (op == "or") {
 		if(e1.arrel()=="T" or e1.arrel()=="T") return tr;
-		else if(e1.arrel()=="F" and (e2.arrel().es_variable() or e2.arrel().es_enter())) return e2;
-		else if(e2.arrel()=="F" and (e1.arrel().es_variable() or e1.arrel().es_enter())) return e1;
+		else if(e1.arrel()=="F" and not e2.arrel().es_boolea()) return e2;
+		else if(e2.arrel()=="F" and not e1.arrel().es_boolea()) return e1;
 		else if(e1.arrel().es_boolea() and e2.arrel().es_boolea()){
 			bool a = e1.arrel().to_bool();
 			bool b = e2.arrel().to_bool();
@@ -483,12 +483,12 @@ expressio expressio:: avalua() const{
 			expressio A1(z);
 			expressio A2(z);
 			if(not aux.fe().es_operand()) A1 = aux.fe().avalua();
-			//HI: Retorna l'expressió resultant d'avaluar l'expressió del p.i. tot el que es pugui.
+			//HI: Guarda a A1 l'expressió resultant d'avaluar el fil esquerre de l'expressió de aux tot el que es pugui.
 			//FITA: el nº de nodes restants del subarbre esquerre.
 			else A1 = aux.fe();
 			if(not aux.arrel().es_operador_unari()){
 				if(not aux.fd().es_operand()) A2 = aux.fd().avalua();
-			//HI: Retorna l'expressió resultant d'avaluar l'expressió del p.i. tot el que es pugui
+			//HI: Guarda a A2 l'expressió resultant d'avaluar el fil dret de l'expressió de aux tot el que es pugui
 			//FITA: el nº de nodes restants del subarbre dret.
 				else A2 = aux.fd();
 			}
@@ -498,8 +498,8 @@ expressio expressio:: avalua() const{
 			}
 			if((A2.es_operand() or A1.es_operand()) and aux.arrel().es_operador_binari()){
 				aux = avalua_operador_boolea(aux.arrel(), A1, A2);
-				if(aux.arrel().es_operador_binari()) aux = avalua_operador_comparacio(aux.arrel(), A1, A2);
-				if(aux.arrel().es_operador_binari()) aux = avalua_operador_aritmetic(aux.arrel(), A1, A2);
+				if(aux.arrel().es_operador_binari()) aux = avalua_operador_comparacio(aux.arrel(), aux.fe(), aux.fd());
+				if(aux.arrel().es_operador_binari()) aux = avalua_operador_aritmetic(aux.arrel(), aux.fe(), aux.fd());
 				return aux;
 			}
 			expressio amp(aux.arrel(), A1, A2);
@@ -519,10 +519,10 @@ expressio expressio::expandeix(token t, const expressio &e) const{
 		expressio A1(z);
 		expressio A2(z);
 		A1 = aux.fe().expandeix(t, e);
-		//HI: Retorna l'expressió resultant de canviar tots els tokens TK de l'expressió del fil esquerre del p.i. per l'expressió E
+		//HI: Guarda a A1 l'expressió resultant de canviar tots els tokens TK de l'expressió del fil esquerre de aux per l'expressió E
 		//FITA: el nº de nodes restants del subarbre esquerre.
 		if(not aux.arrel().es_operador_unari()) A2 = aux.fd().expandeix(t, e);
-		//HI: Retorna l'expressió resultant de canviar tots els tokens TK de l'expressió del fil dret del p.i. per l'expressió E
+		//HI: Guarda a A2 l'expressió resultant de canviar tots els tokens TK de l'expressió del fil dret de aux per l'expressió E
 		//FITA: el nº de nodes restants del subarbre dret.
 		expressio amp(aux.arrel(), A1, A2);
 		return amp;

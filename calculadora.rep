@@ -1,1 +1,16 @@
 // Cal definir els atributs i mètodes privats dins del fitxer .rep
+
+vector<expressio> calcu; //vector de expressions buit on emmagatzemarem les memòries
+
+static int pos_vec (char c);
+//Pre: True
+//Post: En cas de que sigui una lletra de la 'a' a la 'z', retorna la seva posicio de memoria de [0..26]. Retorna 0 en cas de que no sigui una lletra.
+
+static expressio char_to_exp(char c);
+//Pre: True
+//Post: Retorna una expressio creada apartir del caràcter c.
+
+static expressio expandeix_padentro(list<token> &q, list<token>:: iterator it, vector<bool> v, expressio e, vector<expressio> ve);
+//Pre: l=L amb els operands de l'expressio, it=IT al principi de la llista, v=V amb 26 posicions i tot en false, e=E, ve=VE és la memoria.
+// Post: Retorna l'expressió E expandint-la el màxim fent ús de les expressions guardades a VE. Si es detecta una circularitat retorna una expressió amb sola variable de nom   	"ERROR_expressions_circulars" 
+
